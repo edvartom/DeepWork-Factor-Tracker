@@ -1,0 +1,24 @@
+- Check that every function takes in the right values, have the right inputs as default, have the right order and so on.
+- Fill code with comments
+- Int to Int64
+- Something is wrong with total duration of deep work sessions vs. dates
+- Change axis of when he fell asleep, so it does not show 25 o'clock
+- Make shorter plot for duration of deep work sessions!!
+- put the struct-function into the function file???
+- Make plot of how often the same activity, the same interest-level during deep work session
+- Make shorter plots of
+    - dates
+    - fell asleep
+    - woke up
+    - time awake
+    - hours of sleep
+    - sleep quality
+    - nr of sessions
+    - total length of sessions
+    to fit the times he had deep work sessions
+- Find average of the different things when he had a deep work session vs. when he did not have a deep work session
+- Make readme
+    - Improve english by dictionary
+    - Improve english grammar and flow
+    - The data is random, right?
+    - Which function to run or file...
