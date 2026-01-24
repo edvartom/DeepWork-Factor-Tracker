@@ -74,7 +74,7 @@ function remove_zeros(vec)
 end
 
 
-INPUT = read_data("tom_test_no_sessions.txt")
+INPUT = read_data("tom_session_data.txt")
 (DATES, FELL_ASLEEP, WOKE_UP, SLEEP_QUALITY, TIME_AWAKE,
  SESSION_START, SESSION_END, MEAL_BEFORE,
  ACTIVITY, INTEREST_LEVEL

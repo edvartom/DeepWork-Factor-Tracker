@@ -207,4 +207,4 @@ function data_to_file(filepath::String, len::Int64 = tom_nr_samples, activity_ve
     end
 end
 
-data_to_file("tom_test_no_sessions.txt")
+data_to_file("tom_session_data.txt")
