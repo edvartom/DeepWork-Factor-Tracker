@@ -187,6 +187,7 @@ function ask_and_plot()
     x_axis::PlotAxis = ask(old_x_axis)
     y_axis::PlotAxis = ask(x_axis)
     p = plot_axes(x_axis, y_axis)
+    savefig(p, "plot.pdf")
     return p
 end
 

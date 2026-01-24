@@ -1,3 +1,5 @@
+- Plot is in a debugger environment ...
+- How to run files ?
 - Check that every function takes in the right values, have the right inputs as default, have the right order and so on.
 - Fill code with comments
 - Int to Int64
