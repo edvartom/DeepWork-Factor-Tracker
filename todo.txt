@@ -1,5 +1,3 @@
-- Plot is in a debugger environment ...
-- How to run files ?
 - Check that every function takes in the right values, have the right inputs as default, have the right order and so on.
 - Fill code with comments
 - Int to Int64
@@ -19,8 +17,8 @@
     - total length of sessions
     to fit the times he had deep work sessions
 - Find average of the different things when he had a deep work session vs. when he did not have a deep work session
-- Make readme
+- Readme
     - Improve english by dictionary
     - Improve english grammar and flow
     - The data is random, right?
-    - Which function to run or file...
+    - Improve installation instructions?
