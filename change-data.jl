@@ -1,6 +1,6 @@
 using Distributions
 
-tom_nr_samples = 100
+nr_of_samples = 100
 
 function int_vec_to_time_strings(vec2::Vector{Float64})
     vec3::Vector{Int64} = div.(vec2, 1)              # Hour
@@ -22,21 +22,22 @@ function int_vec_to_time_strings(vec2::Vector{Float64})
     return vec7
 end
 
-function generate_dates(len::Int64 = tom_nr_samples, start_date::Date = Date(2026, 1, 1))
+function generate_dates(len::Int64)
+    start_date::Date = Date(2026, 1, 1)
     date::Vector{Date} = collect(start_date : Day(1) : start_date + Day(len - 1))
     date_str::Vector{String} = Dates.format.(date, "dd.mm.yyyy")
     return date_str
 end
 
-function generate_fell_asleep(len::Int64 = tom_nr_samples, dist = Normal, offset::Float64 = 23.5, std::Float64 = 1.0)
-    vec1::Vector{Float64} = rand(dist(offset, std), len)
+function generate_fell_asleep(len::Int64)
+    vec1::Vector{Float64} = rand(Normal(23.5, 1.0), len)
     vec2::Vector{Float64} = ifelse.(vec1 .>= 24, vec1 .- 24, vec1)
     vec3::Vector{String} = int_vec_to_time_strings(vec2)
     return vec3, vec2
 end
 
-function generate_woke_up(len::Int64 = tom_nr_samples, dist = Normal, offset::Float64 = 9.0, std::Float64 = 2.0)
-    vec2::Vector{Float64} = rand(dist(offset, std), len)
+function generate_woke_up(len::Int64)
+    vec2::Vector{Float64} = rand(Normal(9.0, 2.0), len)
     for i in [1:7:length(vec2)]
         vec2[i] .= 7.0
     end
@@ -44,13 +45,13 @@ function generate_woke_up(len::Int64 = tom_nr_samples, dist = Normal, offset::Fl
     return vec3, vec2
 end
 
-function generate_sleep_quality(len::Int64 = tom_nr_samples)
+function generate_sleep_quality(len::Int64)
     vec1::Vector{Int64} = ceil.(Int64, 10*rand(len))
     return string.(vec1)
 end
 
-function generate_hours_awake(len::Int64 = tom_nr_samples, dist = Normal, offset::Float64 = 0.50, std::Float64 = 0.70)
-    vec1::Vector{Float64} = rand(dist(offset, std), len)
+function generate_hours_awake(len::Int64)
+    vec1::Vector{Float64} = rand(Normal(0.5, 0.7), len)
     vec1[vec1 .< 0] .= 0
     vec2::Vector{String} = int_vec_to_time_strings(vec1)
     return vec2
@@ -140,20 +141,17 @@ function generate_activity_and_interest_level(activity_vec::Vector{Activity})
     return activity_title, interest_level
 end
 
-function data_to_file(filepath::String, len::Int64 = tom_nr_samples, activity_vec::Vector{Activity} = activity_vec)
-    date::Vector{String} = generate_dates()
-    fell_asleep::Vector{String}, fell_asleep_float::Vector{Float64} = generate_fell_asleep()
-    woke_up::Vector{String}, woke_up_float::Vector{Float64} = generate_woke_up()
-    sleep_quality::Vector{String} = generate_sleep_quality()
-    hours_awake::Vector{String} = generate_hours_awake()
+function data_to_file(filepath::String, activity_vec::Vector{Activity})
+    date::Vector{String} = generate_dates(nr_of_samples)
+    fell_asleep::Vector{String}, fell_asleep_float::Vector{Float64} = generate_fell_asleep(nr_of_samples)
+    woke_up::Vector{String}, woke_up_float::Vector{Float64} = generate_woke_up(nr_of_samples)
+    sleep_quality::Vector{String} = generate_sleep_quality(nr_of_samples)
+    hours_awake::Vector{String} = generate_hours_awake(nr_of_samples)
     nr_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
-    session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nr_of_sessions)*len))
+    session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nr_of_sessions)*nr_of_samples))
     interval_start::Vector{Float64} = woke_up_float .+ 1
     fell_asleep_float = ifelse.(fell_asleep_float .< 6.0, fell_asleep_float .+ 24, fell_asleep_float)
     interval_end::Vector{Float64} = fell_asleep_float[2:end] .- 1
-    println("fell_asleep_float: ", fell_asleep_float)
-    println("fell_asleep_float[2:end]: ", fell_asleep_float[2:end])
-    println("interval_end: ", interval_end)
     push!(interval_end, 24.0)
     open(filepath, "w") do io
         for i in eachindex(date)
@@ -207,4 +205,4 @@ function data_to_file(filepath::String, len::Int64 = tom_nr_samples, activity_ve
     end
 end
 
-data_to_file("tom_session_data.txt")
+data_to_file("tom_session_data.txt", activity_vec)
