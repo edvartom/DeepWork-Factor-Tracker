@@ -1,4 +1,8 @@
-- Check that every function takes in the right values, have the right inputs as default, have the right order and so on.
+- Check that every function in change-data
+    - takes in the right values
+    - takes in the right functions
+    - have the right inputs as default
+- put all not-functions at the bottom, and do not use capital letters. Should structs and functions be separated, or should they appear chronologically?
 - Fill code with comments
 - Int to Int64
 - Something is wrong with total duration of deep work sessions vs. dates

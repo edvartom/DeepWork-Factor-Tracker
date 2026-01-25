@@ -1,6 +1,6 @@
 using Dates, Plots, Plots.Measures
 
-function read_data(filepath::String)
+function read_data()
     dates::Vector{Date} = []
     fell_asleep::Vector{Float64} = []
     woke_up::Vector{Time} = []
@@ -11,8 +11,7 @@ function read_data(filepath::String)
     meal_before_vec::Vector{Vector{Time}} = []
     activity_vec::Vector{Vector{String}} = []
     interest_level_vec::Vector{Vector{Int}} = []
-    for line::String in eachline(filepath)
-        println(line)
+    for line::String in eachline("tom_session_data.txt")
         line_vec = split(line, ";")
         # Adjusting fell_asleep to count more than 24 hours
         fell_asleep_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
@@ -73,8 +72,7 @@ function remove_zeros(vec)
     return new_vec
 end
 
-
-INPUT = read_data("tom_session_data.txt")
+INPUT = read_data()
 (DATES, FELL_ASLEEP, WOKE_UP, SLEEP_QUALITY, TIME_AWAKE,
  SESSION_START, SESSION_END, MEAL_BEFORE,
  ACTIVITY, INTEREST_LEVEL
@@ -228,8 +226,8 @@ Please try again, and remember to read the instructions carefully.")
         legend = false,
         marker = 2,
         bottom_margin = 10mm,
-        left_margin = 10mm,
         top_margin = 10mm,
+        left_margin = 10mm,
     )
     return p
 end
