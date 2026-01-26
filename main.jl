@@ -106,20 +106,20 @@ Please try again, and remember to read the instructions carefully.")
     return p
 end
 
-function ask(x::PlotAxis)
-    if length(x.data) == 0
+function ask(x_pla::PlotAxis)
+    if length(x_pla.data) == 0
         println("What do you want on the x-axis?
 Choose a number:")
         for i in eachindex(DATA_VEC)
             println(i, " ", DATA_VEC[i].description)
         end
-    elseif !(length(x.data) in length.(getproperty.(DATA_VEC, :data)))
-        error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x.data), ")")
+    elseif !(length(x_pla.data) in length.(getproperty.(DATA_VEC, :data)))
+        error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x_pla.data), ")")
     else
         println("What do you want on the y-axis?
 Choose a number:")
         for i in eachindex(DATA_VEC)
-            if length(DATA_VEC[i].data) == length(x.data)
+            if length(DATA_VEC[i].data) == length(x_pla.data)
                 println(i, " ", DATA_VEC[i].description)
             end
         end
