@@ -1,4 +1,8 @@
-# Deep Work
+# DeepWork-Factor-Tracker
+
+## Author
+
+This project was created by Edvarda Tomter (https://github.com/edvartom).
 
 ## Background story
 Tom is an old fictive man who likes to **study**. He has noticed that he, at seemingly random occations, falls into a flow of concentration, experiencing that concentrating deeply feels easy. This can happen while he is thinking at his studies, when taking a walk, or when he concentrates on something he is doing, like detailed woodworking. He calls moments of deep concentration **deep work sessions** after the book "Deep Work" by Cal Newport\*. Tom wants to check wether these sessions depend on hes sleep at night among other factors. He starts to log some key factors from his sleep every night, as well as some some other factors around his deep work sessions.  
