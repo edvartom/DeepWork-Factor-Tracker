@@ -1,7 +1,5 @@
 using Distributions
 
-nr_of_samples = 100
-
 function int_vec_to_time_strings(vec2::Vector{Float64})
     vec3::Vector{Int64} = div.(vec2, 1)              # Hour
     vec4::Vector{Int64} = floor.(mod.(vec2, 1)*60)   # Minute
@@ -77,60 +75,6 @@ struct Activity
     interest_level::Array{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
 end
 
-bird_watching::Activity = Activity(
-    "Bird Watching", 1, [5,6,7,8,9]
-)
-
-solving_crossword::Activity = Activity(
-    "Solving crossword", 3, [7,8,9]
-)
-
-going_for_a_walk::Activity = Activity(
-    "Going for a walk", 5, [1,2,3,4,5,6,7,8,9,10]
-)
-
-woodworking::Activity = Activity(
-    "Woodworking", 4, [4,5,6,7]
-)
-
-model_building::Activity = Activity(
-    "Model building", 2, [4,5,6,7]
-)
-
-studying::Activity = Activity(
-    "Studying", 10, [1,2,3,4,5,6,7,8,9,10]
-)
-
-resting::Activity = Activity(
-    "Resting", 3, [4,5,6,7,8,9,10]
-)
-
-gardening::Activity = Activity(
-    "Gardening", 1, [10]
-)
-
-golfing::Activity = Activity(
-    "Golfing", 5, [7,8,9]
-)
-
-cooking::Activity = Activity(
-    "Cooking", 1, [9,10]
-)
-
-reading::Activity = Activity(
-    "Reading", 5, [2,3,4,5,6,7,8,9,10]
-)
-
-listening_to_records::Activity = Activity(
-    "Listening to records", 6, [4,5,6,7,8,9,10]
-)
-
-activity_vec = [
-    bird_watching, solving_crossword, going_for_a_walk,
-    woodworking, model_building, studying, resting, gardening,
-    golfing, cooking, reading, listening_to_records
-]
-
 function generate_activity_and_interest_level(activity_vec::Vector{Activity})
     activity_time_amounts::Vector{Int64} = getproperty.(activity_vec, :time_amount)
     activity_index::Int64 = rand(Categorical(activity_time_amounts ./ sum(activity_time_amounts)))
@@ -204,5 +148,61 @@ function data_to_file(filepath::String, activity_vec::Vector{Activity})
         end
     end
 end
+
+nr_of_samples = 100
+
+bird_watching::Activity = Activity(
+    "Bird Watching", 1, [5,6,7,8,9]
+)
+
+solving_crossword::Activity = Activity(
+    "Solving crossword", 3, [7,8,9]
+)
+
+going_for_a_walk::Activity = Activity(
+    "Going for a walk", 5, [1,2,3,4,5,6,7,8,9,10]
+)
+
+woodworking::Activity = Activity(
+    "Woodworking", 4, [4,5,6,7]
+)
+
+model_building::Activity = Activity(
+    "Model building", 2, [4,5,6,7]
+)
+
+studying::Activity = Activity(
+    "Studying", 10, [1,2,3,4,5,6,7,8,9,10]
+)
+
+resting::Activity = Activity(
+    "Resting", 3, [4,5,6,7,8,9,10]
+)
+
+gardening::Activity = Activity(
+    "Gardening", 1, [10]
+)
+
+golfing::Activity = Activity(
+    "Golfing", 5, [7,8,9]
+)
+
+cooking::Activity = Activity(
+    "Cooking", 1, [9,10]
+)
+
+reading::Activity = Activity(
+    "Reading", 5, [2,3,4,5,6,7,8,9,10]
+)
+
+listening_to_records::Activity = Activity(
+    "Listening to records", 6, [4,5,6,7,8,9,10]
+)
+
+activity_vec = [
+    bird_watching, solving_crossword, going_for_a_walk,
+    woodworking, model_building, studying, resting, gardening,
+    golfing, cooking, reading, listening_to_records
+]
 
 data_to_file("tom_session_data.txt", activity_vec)

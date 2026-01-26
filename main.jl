@@ -72,12 +72,6 @@ function remove_zeros(vec)
     return new_vec
 end
 
-INPUT = read_data()
-(DATES, FELL_ASLEEP, WOKE_UP, SLEEP_QUALITY, TIME_AWAKE,
- SESSION_START, SESSION_END, MEAL_BEFORE,
- ACTIVITY, INTEREST_LEVEL
-) = INPUT
-
 Base.@kwdef struct PlotAxis
     title::String = ""
     data::Vector{Any} = []
@@ -86,6 +80,70 @@ Base.@kwdef struct PlotAxis
     label::String = ""
     description::String = ""
 end
+
+function plot_axes(x::PlotAxis, y::PlotAxis)
+    if length(x.data) != length(y.data)
+        error("error: You chose axes of different length.
+The length of the the x- and the y-array are $(length(x.data)) and $(length(y.data)).
+Please try again, and remember to read the instructions carefully.")
+    end
+    p = scatter(x.data, y.data;
+        title = x.title * " vs. " * lowercase(y.title),
+        titlefontsize = 12,
+        xticks = x.ticks,
+        xrotation = x.rotation,
+        xlabel = x.label,
+        xguidefontsize = 8,
+        yticks = y.ticks,
+        ylabel = y.label,
+        yguidefontsize = 8,
+        legend = false,
+        marker = 2,
+        bottom_margin = 10mm,
+        top_margin = 10mm,
+        left_margin = 10mm,
+    )
+    return p
+end
+
+function ask(x::PlotAxis)
+    if length(x.data) == 0
+        println("What do you want on the x-axis?
+Choose a number:")
+        for i in eachindex(DATA_VEC)
+            println(i, " ", DATA_VEC[i].description)
+        end
+    elseif !(length(x.data) in length.(getproperty.(DATA_VEC, :data)))
+        error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x.data), ")")
+    else
+        println("What do you want on the y-axis?
+Choose a number:")
+        for i in eachindex(DATA_VEC)
+            if length(DATA_VEC[i].data) == length(x.data)
+                println(i, " ", DATA_VEC[i].description)
+            end
+        end
+    end
+    println("DUE TO AN ERROR IN VSCODE, YOU MIGHT HAVE TO WRITE YOUR ANSWER TWO TIMES.
+PRESS ENTER AT THE END EACH TIME.")
+    answer::PlotAxis = DATA_VEC[parse(Int, readline())]
+    return answer
+end
+
+function ask_and_plot()
+    old_x_axis::PlotAxis = PlotAxis()
+    x_axis::PlotAxis = ask(old_x_axis)
+    y_axis::PlotAxis = ask(x_axis)
+    p = plot_axes(x_axis, y_axis)
+    savefig(p, "plot.pdf")
+    return p
+end
+
+INPUT = read_data()
+(DATES, FELL_ASLEEP, WOKE_UP, SLEEP_QUALITY, TIME_AWAKE,
+ SESSION_START, SESSION_END, MEAL_BEFORE,
+ ACTIVITY, INTEREST_LEVEL
+) = INPUT
 
 ############ Alternative structs ####################
 ################ Length 97 ##########################
@@ -206,63 +264,5 @@ DATA_VEC::Vector{PlotAxis} = [
     duration_sessions, meal_before, time_since_meal, activity, interest_level
 ]
 #####################################################
-
-function plot_axes(x::PlotAxis, y::PlotAxis)
-    if length(x.data) != length(y.data)
-        error("error: You chose axes of different length.
-The length of the the x- and the y-array are $(length(x.data)) and $(length(y.data)).
-Please try again, and remember to read the instructions carefully.")
-    end
-    p = scatter(x.data, y.data;
-        title = x.title * " vs. " * lowercase(y.title),
-        titlefontsize = 12,
-        xticks = x.ticks,
-        xrotation = x.rotation,
-        xlabel = x.label,
-        xguidefontsize = 8,
-        yticks = y.ticks,
-        ylabel = y.label,
-        yguidefontsize = 8,
-        legend = false,
-        marker = 2,
-        bottom_margin = 10mm,
-        top_margin = 10mm,
-        left_margin = 10mm,
-    )
-    return p
-end
-
-function ask(x::PlotAxis)
-    if length(x.data) == 0
-        println("What do you want on the x-axis?
-Choose a number:")
-        for i in eachindex(DATA_VEC)
-            println(i, " ", DATA_VEC[i].description)
-        end
-    elseif !(length(x.data) in length.(getproperty.(DATA_VEC, :data)))
-        error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x.data), ")")
-    else
-        println("What do you want on the y-axis?
-Choose a number:")
-        for i in eachindex(DATA_VEC)
-            if length(DATA_VEC[i].data) == length(x.data)
-                println(i, " ", DATA_VEC[i].description)
-            end
-        end
-    end
-    println("DUE TO AN ERROR IN VSCODE, YOU MIGHT HAVE TO WRITE YOUR ANSWER TWO TIMES.
-PRESS ENTER AT THE END EACH TIME.")
-    answer::PlotAxis = DATA_VEC[parse(Int, readline())]
-    return answer
-end
-
-function ask_and_plot()
-    old_x_axis::PlotAxis = PlotAxis()
-    x_axis::PlotAxis = ask(old_x_axis)
-    y_axis::PlotAxis = ask(x_axis)
-    p = plot_axes(x_axis, y_axis)
-    savefig(p, "plot.pdf")
-    return p
-end
 
 ask_and_plot()

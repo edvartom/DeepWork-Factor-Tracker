@@ -4,6 +4,7 @@
 - Something is wrong with total duration of deep work sessions vs. dates
 - Change axis of when he fell asleep, so it does not show 25 o'clock
 - Make shorter plot for duration of deep work sessions!!
+- Make data_to_file() shorter
 - put the struct-function into the function file???
 - Make plot of how often the same activity, the same interest-level during deep work session
 - Make shorter plots of
