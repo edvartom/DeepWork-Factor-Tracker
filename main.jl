@@ -131,10 +131,10 @@ PRESS ENTER AT THE END EACH TIME.")
 end
 
 function ask_and_plot()
-    old_x_axis::PlotAxis = PlotAxis()
-    x_axis::PlotAxis = ask(old_x_axis)
-    y_axis::PlotAxis = ask(x_axis)
-    p = plot_axes(x_axis, y_axis)
+    old_x_pla::PlotAxis = PlotAxis()
+    x_pla::PlotAxis = ask(old_x_pla)
+    y_pla::PlotAxis = ask(x_pla)
+    p = plot_axes(x_pla, y_pla)
     savefig(p, "plot.pdf")
     return p
 end

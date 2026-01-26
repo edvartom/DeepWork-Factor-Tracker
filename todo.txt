@@ -1,5 +1,5 @@
 - Change variable names to be concise.
-    - Do not use capital letters.
+- Do not use capital letters, and DATA_VEC is currently definend after being used ...
 - Should structs and functions be separated, or should they appear chronologically?
 - Fill code with comments
 - Int to Int64
