@@ -40,7 +40,7 @@ function read_data()
 end
 
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
-    nrs_of_sessions::Array{Int} = []
+    nrs_of_sessions::Vector{Int} = []
     for i::Int in eachindex(session_starts_vec)
         session_lengths::Vector{Nanosecond} = session_ends_vec[i] - session_starts_vec[i]
         if session_lengths != [Nanosecond(0)]
@@ -52,9 +52,9 @@ function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_
     return nrs_of_sessions
 end
 
-function find_total_session_lengths(session_lengths)
+function find_total_session_lengths(session_lengths_vec::Vector{Vector{Nanosecond}})
     total_session_lengts::Vector{Time} = []
-    for vec::Vector{Nanosecond} in session_lengths
+    for vec::Vector{Nanosecond} in session_lengths_vec
         push!(total_session_lengts, Time(sum(vec)))
     end
     return total_session_lengts
