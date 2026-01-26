@@ -81,21 +81,21 @@ Base.@kwdef struct PlotAxis
     description::String = ""
 end
 
-function plot_axes(x::PlotAxis, y::PlotAxis)
-    if length(x.data) != length(y.data)
+function plot_axes(x_pla::PlotAxis, y_pla::PlotAxis)
+    if length(x_pla.data) != length(y_pla.data)
         error("error: You chose axes of different length.
-The length of the the x- and the y-array are $(length(x.data)) and $(length(y.data)).
+The length of the the x- and the y-array are $(length(x_pla.data)) and $(length(y_pla.data)).
 Please try again, and remember to read the instructions carefully.")
     end
-    p = scatter(x.data, y.data;
-        title = x.title * " vs. " * lowercase(y.title),
+    p = scatter(x_pla.data, y_pla.data;
+        title = x_pla.title * " vs. " * lowercase(y_pla.title),
         titlefontsize = 12,
-        xticks = x.ticks,
-        xrotation = x.rotation,
-        xlabel = x.label,
+        xticks = x_pla.ticks,
+        xrotation = x_pla.rotation,
+        xlabel = x_pla.label,
         xguidefontsize = 8,
-        yticks = y.ticks,
-        ylabel = y.label,
+        yticks = y_pla.ticks,
+        ylabel = y_pla.label,
         yguidefontsize = 8,
         legend = false,
         marker = 2,
