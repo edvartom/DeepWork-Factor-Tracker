@@ -2,54 +2,54 @@ using Dates, Plots, Plots.Measures
 
 function read_data()
     dates::Vector{Date} = []
-    fell_asleep::Vector{Float64} = []
-    woke_up::Vector{Time} = []
-    sleep_quality::Vector{Int} = []
-    time_awake::Vector{Time} = []
-    session_start_vec::Vector{Vector{Time}} = []
-    session_end_vec::Vector{Vector{Time}} = []
-    meal_before_vec::Vector{Vector{Time}} = []
-    activity_vec::Vector{Vector{String}} = []
-    interest_level_vec::Vector{Vector{Int}} = []
+    fell_asleeps::Vector{Float64} = []
+    woke_ups::Vector{Time} = []
+    sleep_qualities::Vector{Int} = []
+    time_awakes::Vector{Time} = []
+    session_starts_vec::Vector{Vector{Time}} = []
+    session_ends_vec::Vector{Vector{Time}} = []
+    meal_befores_vec::Vector{Vector{Time}} = []
+    activities_vec::Vector{Vector{String}} = []
+    interest_levels_vec::Vector{Vector{Int}} = []
     for line::String in eachline("tom_session_data.txt")
         line_vec = split(line, ";")
         # Adjusting fell_asleep to count more than 24 hours
-        fell_asleep_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
-        fell_asleep_24::Float64 = fell_asleep_00 < 3 ? fell_asleep_00 + 24 : fell_asleep_00
+        fell_asleeps_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
+        fell_asleeps_24::Float64 = fell_asleeps_00 < 3 ? fell_asleeps_00 + 24 : fell_asleeps_00
         push!(dates, Date(String(line_vec[1]), "dd.mm.yyyy"))
-        push!(fell_asleep, fell_asleep_24)
-        push!(woke_up, Time(String(line_vec[3]), "HH:MM"))
-        push!(sleep_quality, parse(Int, String(line_vec[4])))
-        push!(time_awake, Time(String(line_vec[5]), "HH:MM"))
-        session_start::Vector{Time} = Time.(String.(split(line_vec[6], ", ")), "HH:MM")
-        session_end::Vector{Time} = Time.(String.(split(line_vec[7], ", ")), "HH:MM")
-        meal_before::Vector{Time} = Time.(String.(split(line_vec[8], ", ")), "HH:MM")
-        activity::Vector{String} = String.(split(line_vec[9], ", "))
-        interest_level::Vector{Int} = parse.(Int, String.(split(line_vec[10], ", ")))
-        push!(session_start_vec, session_start)
-        push!(session_end_vec, session_end)
-        push!(meal_before_vec, meal_before)
-        push!(activity_vec, activity)
-        push!(interest_level_vec, interest_level)
+        push!(fell_asleeps, fell_asleeps_24)
+        push!(woke_ups, Time(String(line_vec[3]), "HH:MM"))
+        push!(sleep_qualities, parse(Int, String(line_vec[4])))
+        push!(time_awakes, Time(String(line_vec[5]), "HH:MM"))
+        session_starts::Vector{Time} = Time.(String.(split(line_vec[6], ", ")), "HH:MM")
+        session_ends::Vector{Time} = Time.(String.(split(line_vec[7], ", ")), "HH:MM")
+        meal_befores::Vector{Time} = Time.(String.(split(line_vec[8], ", ")), "HH:MM")
+        activities::Vector{String} = String.(split(line_vec[9], ", "))
+        interest_levels::Vector{Int} = parse.(Int, String.(split(line_vec[10], ", ")))
+        push!(session_starts_vec, session_starts)
+        push!(session_ends_vec, session_ends)
+        push!(meal_befores_vec, meal_befores)
+        push!(activities_vec, activities)
+        push!(interest_levels_vec, interest_levels)
     end
     return (
-           dates, fell_asleep, woke_up, sleep_quality, time_awake,
-           session_start_vec, session_end_vec, meal_before_vec,
-           activity_vec, interest_level_vec
+           dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
+           session_starts_vec, session_ends_vec, meal_befores_vec,
+           activities_vec, interest_levels_vec
            )
 end
 
-function find_nr_of_sessions(session_start::Vector{Vector{Time}}, session_end::Vector{Vector{Time}})
-    nr_of_sessions::Array{Int} = []
-    for i::Int in eachindex(session_start)
-        session_length::Vector{Nanosecond} = session_end[i] - session_start[i]
-        if session_length != [Nanosecond(0)]
-            push!(nr_of_sessions, length(session_length))
+function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
+    nrs_of_sessions::Array{Int} = []
+    for i::Int in eachindex(session_starts_vec)
+        session_lengths::Vector{Nanosecond} = session_ends_vec[i] - session_starts_vec[i]
+        if session_lengths != [Nanosecond(0)]
+            push!(nrs_of_sessions, length(session_lengths))
         else
-            push!(nr_of_sessions, 0)
+            push!(nrs_of_sessions, 0)
         end
     end
-    return nr_of_sessions
+    return nrs_of_sessions
 end
 
 function find_total_session_lengths(session_lengths)
@@ -193,7 +193,7 @@ sleep_quality::PlotAxis = PlotAxis(
 
 nr_of_sessions::PlotAxis = PlotAxis(
     title = "Number of sessions",
-    data = find_nr_of_sessions(SESSION_START, SESSION_END),
+    data = find_nrs_of_sessions(SESSION_START, SESSION_END),
     label = "How many deep work sessions\nTom had each day",
     description = "How many deep work sessions Tom had each day"
 )

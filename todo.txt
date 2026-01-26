@@ -1,6 +1,9 @@
-- put all not-functions at the bottom, and do not use capital letters. Should structs and functions be separated, or should they appear chronologically?
+- Change variable names to be concise.
+    - Do not use capital letters.
+- Should structs and functions be separated, or should they appear chronologically?
 - Fill code with comments
 - Int to Int64
+- Vectorize find_nrs_of_sessions(...) (see bok 2 for notes on how)
 - Something is wrong with total duration of deep work sessions vs. dates
 - Change axis of when he fell asleep, so it does not show 25 o'clock
 - Make shorter plot for duration of deep work sessions!!
