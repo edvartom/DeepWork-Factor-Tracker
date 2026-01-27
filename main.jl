@@ -139,91 +139,91 @@ function ask_and_plot()
     return p
 end
 
-INPUT = read_data()
-(DATES, FELL_ASLEEP, WOKE_UP, SLEEP_QUALITY, TIME_AWAKE,
- SESSION_START, SESSION_END, MEAL_BEFORE,
- ACTIVITY, INTEREST_LEVEL
-) = INPUT
+(
+    dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
+    session_starts_vec, session_ends_vec, MEAL_BEFORE,
+    ACTIVITY, INTEREST_LEVEL
+) = read_data()
 
 ############ Alternative structs ####################
 ################ Length 97 ##########################
-dates::PlotAxis = PlotAxis(
+dates_pla::PlotAxis = PlotAxis(
     title = "Dates",
-    data = DATES,
-    ticks = (DATES[1:10:end], Dates.format.(DATES[1:10:end], "dd.mm.yyyy")),
+    data = dates,
+    ticks = (dates[1:10:end], Dates.format.(dates[1:10:end], "dd.mm.yyyy")),
     rotation = 45,
     label = "Date",
     description = "Date"
 )
 
-fell_asleep::PlotAxis = PlotAxis(
+fell_asleeps_pla::PlotAxis = PlotAxis(
     title = "Fell asleep",
-    data = FELL_ASLEEP,
+    data = fell_asleeps,
     label = "When Tom fell asleep the night\nbefore the deep work session",
     description = "When Tom fell asleep the night before the deep work session"
 )
 
-woke_up::PlotAxis = PlotAxis(
+woke_ups_pla::PlotAxis = PlotAxis(
     title = "Woke up",
-    data = WOKE_UP,
+    data = woke_ups,
     label = "When Tom woke up the morning\nbefore the deep work session",
     description = "When Tom woke up the morning before the deep work session"
 )
 
-time_awake::PlotAxis = PlotAxis(
+time_awakes_pla::PlotAxis = PlotAxis(
     title = "Time awake",
-    data = TIME_AWAKE,
+    data = time_awakes,
     label = "Total time Tom was awake during the night",
     description = "Total time Tom was awake during the night"
 )
 
-hours_of_sleep::PlotAxis = PlotAxis(
+hours_of_sleeps_pla::PlotAxis = PlotAxis(
     title = "Hours of sleep",
-    data = Dates.value.(WOKE_UP)/3600e9 + fill(24, length(WOKE_UP)) - FELL_ASLEEP - Dates.value.(TIME_AWAKE)/3600e9,
+    data = Dates.value.(woke_ups)/3600e9 + fill(24, length(woke_ups)) - fell_asleeps - Dates.value.(time_awakes)/3600e9,
     label = "Hours of sleep Tom got during the\nnight before the deep work session",
     description = "Hours of sleep Tom got during the night before the deep work session"
 )
 
-sleep_quality::PlotAxis = PlotAxis(
+sleep_qualities_pla::PlotAxis = PlotAxis(
     title = "Sleep quality",
-    data = SLEEP_QUALITY,
+    data = sleep_qualities,
     label = "Sleep quality of the night\n before the deep work session\n(1 is worst, 10 is best)",
     description = "Sleep quality of the night before the deep work session"
 )
 
-nr_of_sessions::PlotAxis = PlotAxis(
+nrs_of_sessions_pla::PlotAxis = PlotAxis(
     title = "Number of sessions",
-    data = find_nrs_of_sessions(SESSION_START, SESSION_END),
+    data = find_nrs_of_sessions(session_starts_vec, session_ends_vec),
     label = "How many deep work sessions\nTom had each day",
     description = "How many deep work sessions Tom had each day"
 )
 
-tot_duration_sessions::PlotAxis = PlotAxis(
+tot_durations_sessions_pla::PlotAxis = PlotAxis(
     title = "Total session duration",
-    data = find_total_session_lengths(SESSION_START - SESSION_END),
+    data = find_total_session_lengths(session_starts_vec - session_ends_vec),
     label = "Total duration of deep work sessions\nduring the day",
     description = "Total duration of deep work sessions during the day"
 )
 
 ############ Alternative structs ####################
 ################ Length 39 ##########################
-session_start::PlotAxis = PlotAxis(
+session_starts_pla::PlotAxis = PlotAxis(
     title = "Session start",
-    data = remove_zeros(vcat(SESSION_START...)),
+    data = remove_zeros(vcat(session_starts_vec...)),
     label = "Start time of each deep work session",
     description = "Start time of each deep work session"
 )
 
-session_end::PlotAxis = PlotAxis(
+session_ends_pla::PlotAxis = PlotAxis(
     title = "Session end",
-    data = remove_zeros(vcat(SESSION_END...)),
+    data = remove_zeros(vcat(session_ends_vec...)),
     label = "End time of each deep work session",
     description = "End time of each deep work session"
 )
 
 duration_sessions::PlotAxis = PlotAxis(
     title = "Duration of sessions",
-    data = Time.(session_end.data - session_start.data),
+    data = Time.(session_ends_pla.data - session_starts_pla.data),
     label = "Duration of each deep work session",
     description = "Duration of each deep work session"
 )
@@ -237,7 +237,7 @@ meal_before::PlotAxis = PlotAxis(
 
 time_since_meal::PlotAxis = PlotAxis(
     title = "Time since meal",
-    data = remove_zeros(Time.(vcat((SESSION_START - MEAL_BEFORE)...))),
+    data = remove_zeros(Time.(vcat((session_starts_vec - MEAL_BEFORE)...))),
     label = "Time from the last meal\nto the beginning of\nthe deep work session",
     description = "Time from the last meal to the beginning of the deep work session"
 )
@@ -259,8 +259,8 @@ interest_level::PlotAxis = PlotAxis(
 )
 #################### Data_vector ####################
 DATA_VEC::Vector{PlotAxis} = [
-    dates, fell_asleep, woke_up, time_awake, hours_of_sleep, sleep_quality,
-    nr_of_sessions, tot_duration_sessions, session_start, session_end, 
+    dates_pla, fell_asleeps_pla, woke_ups_pla, time_awakes_pla, hours_of_sleeps_pla, sleep_qualities_pla,
+    nrs_of_sessions_pla, tot_durations_sessions_pla, session_starts_pla, session_ends_pla, 
     duration_sessions, meal_before, time_since_meal, activity, interest_level
 ]
 #####################################################
