@@ -11,7 +11,8 @@ function read_data()
     meal_befores_vec::Vector{Vector{Time}} = []
     activities_vec::Vector{Vector{String}} = []
     interest_levels_vec::Vector{Vector{Int}} = []
-    for line::String in eachline("tom_session_data.txt")
+    all_lines::Vector{String} = collect(eachline("tom_session_data.txt"))
+    for line::String in all_lines[2:end]
         line_vec = split(line, ";")
         # Adjusting fell_asleep to count more than 24 hours
         fell_asleeps_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
@@ -173,6 +174,7 @@ woke_ups_pla::PlotAxis = PlotAxis(
 time_awakes_pla::PlotAxis = PlotAxis(
     title = "Time awake",
     data = time_awakes,
+    rotation = 45,
     label = "Total time Tom was awake during the night",
     description = "Total time Tom was awake during the night"
 )

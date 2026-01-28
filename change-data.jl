@@ -97,6 +97,7 @@ function data_to_file(filepath::String, activities_vec::Vector{Activity})
     interval_ends::Vector{Float64} = fell_asleep_floats[2:end] .- 1
     push!(interval_ends, 24.0)
     open(filepath, "w") do io
+        write(io, "Dates;Fell asleep;Woke up;Sleep quality;Hours awake;Session start;Session end;Time since meal;Activity;Interest level\n")
         for i in eachindex(dates)
             if !(i in session_indices)
                 write(
