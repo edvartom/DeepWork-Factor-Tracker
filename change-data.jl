@@ -74,17 +74,17 @@ struct Activity
     interest_level::Array{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
 end
 
-function generate_activities_and_interest_levels(activity_vec::Vector{Activity})
-    activity_time_amounts::Vector{Int64} = getproperty.(activity_vec, :time_amount)
+function generate_activities_and_interest_levels(activity_acts::Vector{Activity})
+    activity_time_amounts::Vector{Int64} = getproperty.(activity_acts, :time_amount)
     activity_index::Int64 = rand(Categorical(activity_time_amounts ./ sum(activity_time_amounts)))
-    activity_during_session::Activity = activity_vec[activity_index]
+    activity_during_session::Activity = activity_acts[activity_index]
     activity_title::String = activity_during_session.title
     interest_level_vec::Vector{Int64} = activity_during_session.interest_level
     interest_level::String = string(ceil(Int64, rand() * length(interest_level_vec) + interest_level_vec[1]))
     return activity_title, interest_level
 end
 
-function data_to_file(filepath::String, activities_vec::Vector{Activity})
+function data_to_file(filepath::String, activity_acts::Vector{Activity})
     dates::Vector{String} = generate_dates(nr_of_samples)
     fell_asleeps::Vector{String}, fell_asleep_floats::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
     woke_ups::Vector{String}, woke_up_floats::Vector{Float64} = generate_woke_ups(nr_of_samples)
@@ -117,7 +117,7 @@ function data_to_file(filepath::String, activities_vec::Vector{Activity})
                 for j in session_indices
                     if j == i
                         session_start::String, session_end::String, meal_before::String = generate_session_times(interval_starts[i], interval_ends[i])
-                        activity::String, interest_level::String = generate_activities_and_interest_levels(activities_vec)
+                        activity::String, interest_level::String = generate_activities_and_interest_levels(activity_acts)
                         session_starts *= session_start * ", "
                         session_ends *= session_end * ", "
                         meal_befores *= meal_before * ", "
