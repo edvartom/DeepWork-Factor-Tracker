@@ -1,4 +1,5 @@
 - Change variable names to be concise.
+- Make heading for the data
 - Do not use capital letters, and DATA_VEC is currently definend after being used ...
 - Should structs and functions be separated, or should they appear chronologically?
 - Fill code with comments

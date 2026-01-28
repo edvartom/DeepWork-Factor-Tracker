@@ -1,58 +1,58 @@
 using Distributions
 
-function int_vec_to_time_strings(vec2::Vector{Float64})
-    vec3::Vector{Int64} = div.(vec2, 1)              # Hour
-    vec4::Vector{Int64} = floor.(mod.(vec2, 1)*60)   # Minute
-    vec5::Vector{String} = string.(vec3)
-    vec6::Vector{String} = string.(vec4)
-    for i in eachindex(vec5)
-        if length(vec5[i]) == 1
-            vec5[i] = "0" * vec5[i]
+function float_vec_to_time_strings(floats::Vector{Float64})
+    hour_ints::Vector{Int64} = div.(floats, 1)
+    minute_ints::Vector{Int64} = floor.(mod.(floats, 1)*60)
+    hour_strs::Vector{String} = string.(hour_ints)
+    minute_strs::Vector{String} = string.(minute_ints)
+    for i in eachindex(hour_strs)
+        if length(hour_strs[i]) == 1
+            hour_strs[i] = "0" * hour_strs[i]
         end
-        if length(vec6[i]) == 1
-            vec6[i] = "0" * vec6[i]
+        if length(minute_strs[i]) == 1
+            minute_strs[i] = "0" * minute_strs[i]
         end
-        if (length(vec5[i]) != 2) || (length(vec6[i]) != 2)
-            error("error: length(vec5) != 2 OR length(vec6) != 2\nlength(vec5): $length(vec5)\nlength(vec6): $length(vec6)")
+        if (length(hour_strs[i]) != 2) || (length(minute_strs[i]) != 2)
+            error("error: length(hour_strs) != 2 OR length(minute_strs) != 2\nlength(hour_strs): $length(hour_strs)\nlength(minute_strs): $length(minute_strs)")
         end
     end
-    vec7::Vector{String} = vec5 .* ":" .* vec6
-    return vec7
+    time_strs::Vector{String} = hour_strs .* ":" .* minute_strs
+    return time_strs
 end
 
 function generate_dates(len::Int64)
     start_date::Date = Date(2026, 1, 1)
-    date::Vector{Date} = collect(start_date : Day(1) : start_date + Day(len - 1))
-    date_str::Vector{String} = Dates.format.(date, "dd.mm.yyyy")
-    return date_str
+    date_dates::Vector{Date} = collect(start_date : Day(1) : start_date + Day(len - 1))
+    date_strs::Vector{String} = Dates.format.(date_dates, "dd.mm.yyyy")
+    return date_strs
 end
 
-function generate_fell_asleep(len::Int64)
-    vec1::Vector{Float64} = rand(Normal(23.5, 1.0), len)
-    vec2::Vector{Float64} = ifelse.(vec1 .>= 24, vec1 .- 24, vec1)
-    vec3::Vector{String} = int_vec_to_time_strings(vec2)
-    return vec3, vec2
+function generate_fell_asleeps(len::Int64)
+    fell_asleep_floats_24::Vector{Float64} = rand(Normal(23.5, 1.0), len)
+    fell_asleep_floats_00::Vector{Float64} = ifelse.(fell_asleep_floats_24 .>= 24, fell_asleep_floats_24 .- 24, fell_asleep_floats_24)
+    fell_asleep_strs::Vector{String} = float_vec_to_time_strings(fell_asleep_floats_00)
+    return fell_asleep_strs, fell_asleep_floats_00
 end
 
-function generate_woke_up(len::Int64)
-    vec2::Vector{Float64} = rand(Normal(9.0, 2.0), len)
-    for i in [1:7:length(vec2)]
-        vec2[i] .= 7.0
+function generate_woke_ups(len::Int64)
+    woke_up_floats::Vector{Float64} = rand(Normal(9.0, 2.0), len)
+    for i in [1:7:length(woke_up_floats)]
+        woke_up_floats[i] .= 7.0
     end
-    vec3::Vector{String} = int_vec_to_time_strings(vec2)
-    return vec3, vec2
+    woke_up_strs::Vector{String} = float_vec_to_time_strings(woke_up_floats)
+    return woke_up_strs, woke_up_floats
 end
 
-function generate_sleep_quality(len::Int64)
-    vec1::Vector{Int64} = ceil.(Int64, 10*rand(len))
-    return string.(vec1)
+function generate_sleep_qualities(len::Int64)
+    sleep_quality_ints::Vector{Int64} = ceil.(Int64, 10*rand(len))
+    return string.(sleep_quality_ints)
 end
 
-function generate_hours_awake(len::Int64)
-    vec1::Vector{Float64} = rand(Normal(0.5, 0.7), len)
-    vec1[vec1 .< 0] .= 0
-    vec2::Vector{String} = int_vec_to_time_strings(vec1)
-    return vec2
+function generate_hours_awakes(len::Int64)
+    hours_awake_floats::Vector{Float64} = rand(Normal(0.5, 0.7), len)
+    hours_awake_floats[hours_awake_floats .< 0] .= 0
+    hours_awake_strs::Vector{String} = float_vec_to_time_strings(hours_awake_floats)
+    return hours_awake_strs
 end
 
 function generate_session_times(interval_start::Float64, interval_end::Float64)
@@ -63,10 +63,9 @@ function generate_session_times(interval_start::Float64, interval_end::Float64)
     session_start_float::Float64 = rand().*(interval_end - interval_start - session_duration - time_since_meal) .+ interval_start .+ time_since_meal
     session_end_float::Float64 = session_start_float + session_duration
     meal_before_float::Float64 = session_start_float - time_since_meal
-    session_start_vec::Vector{String} = int_vec_to_time_strings([session_start_float])
-    session_end_vec::Vector{String} = int_vec_to_time_strings([session_end_float])
-    meal_before_vec::Vector{String} = int_vec_to_time_strings([meal_before_float])
-    return session_start_vec[1], session_end_vec[1], meal_before_vec[1]
+    session_start_str::String, session_end_str::String, meal_before_str::String = (
+        float_vec_to_time_strings([session_start_float, session_end_float, meal_before_float]))
+    return session_start_str, session_end_str, meal_before_str
 end
 
 struct Activity
@@ -75,7 +74,7 @@ struct Activity
     interest_level::Array{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
 end
 
-function generate_activity_and_interest_level(activity_vec::Vector{Activity})
+function generate_activities_and_interest_levels(activity_vec::Vector{Activity})
     activity_time_amounts::Vector{Int64} = getproperty.(activity_vec, :time_amount)
     activity_index::Int64 = rand(Categorical(activity_time_amounts ./ sum(activity_time_amounts)))
     activity_during_session::Activity = activity_vec[activity_index]
@@ -87,10 +86,10 @@ end
 
 function data_to_file(filepath::String, activity_vec::Vector{Activity})
     date::Vector{String} = generate_dates(nr_of_samples)
-    fell_asleep::Vector{String}, fell_asleep_float::Vector{Float64} = generate_fell_asleep(nr_of_samples)
-    woke_up::Vector{String}, woke_up_float::Vector{Float64} = generate_woke_up(nr_of_samples)
-    sleep_quality::Vector{String} = generate_sleep_quality(nr_of_samples)
-    hours_awake::Vector{String} = generate_hours_awake(nr_of_samples)
+    fell_asleep::Vector{String}, fell_asleep_float::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
+    woke_up::Vector{String}, woke_up_float::Vector{Float64} = generate_woke_ups(nr_of_samples)
+    sleep_quality::Vector{String} = generate_sleep_qualities(nr_of_samples)
+    hours_awake::Vector{String} = generate_hours_awakes(nr_of_samples)
     nr_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
     session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nr_of_sessions)*nr_of_samples))
     interval_start::Vector{Float64} = woke_up_float .+ 1
@@ -117,7 +116,7 @@ function data_to_file(filepath::String, activity_vec::Vector{Activity})
                 for j in session_indices
                     if j == i
                         session_start::String, session_end::String, meal_before::String = generate_session_times(interval_start[i], interval_end[i])
-                        activity::String, interest_level::String = generate_activity_and_interest_level(activity_vec)
+                        activity::String, interest_level::String = generate_activities_and_interest_levels(activity_vec)
                         session_starts *= session_start * ", "
                         session_ends *= session_end * ", "
                         meal_befores *= meal_before * ", "
