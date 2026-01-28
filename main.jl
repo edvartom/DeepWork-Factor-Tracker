@@ -1,6 +1,9 @@
+# Include necessary packages
 using Dates, Plots, Plots.Measures
 
-function read_data()
+# Read data from the file
+function read_data(filepath::String)
+    # Making one vector for each column in the file
     dates::Vector{Date} = []
     fell_asleeps::Vector{Float64} = []
     woke_ups::Vector{Time} = []
@@ -11,28 +14,34 @@ function read_data()
     meal_befores_vec::Vector{Vector{Time}} = []
     activities_vec::Vector{Vector{String}} = []
     interest_levels_vec::Vector{Vector{Int}} = []
-    all_lines::Vector{String} = collect(eachline("tom_session_data.txt"))
+    # Gather all of the lines into a variable
+    all_lines::Vector{String} = collect(eachline(filepath))
+    # Process each line
     for line::String in all_lines[2:end]
+        # Split lines into columns
         line_vec = split(line, ";")
-        # Adjusting fell_asleep to count more than 24 hours
-        fell_asleeps_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
-        fell_asleeps_24::Float64 = fell_asleeps_00 < 3 ? fell_asleeps_00 + 24 : fell_asleeps_00
-        push!(dates, Date(String(line_vec[1]), "dd.mm.yyyy"))
-        push!(fell_asleeps, fell_asleeps_24)
-        push!(woke_ups, Time(String(line_vec[3]), "HH:MM"))
-        push!(sleep_qualities, parse(Int, String(line_vec[4])))
-        push!(time_awakes, Time(String(line_vec[5]), "HH:MM"))
+        # Further splitting for the lines containing more than one deep work session
         session_starts::Vector{Time} = Time.(String.(split(line_vec[6], ", ")), "HH:MM")
         session_ends::Vector{Time} = Time.(String.(split(line_vec[7], ", ")), "HH:MM")
         meal_befores::Vector{Time} = Time.(String.(split(line_vec[8], ", ")), "HH:MM")
         activities::Vector{String} = String.(split(line_vec[9], ", "))
         interest_levels::Vector{Int} = parse.(Int, String.(split(line_vec[10], ", ")))
+        # Adjusting fell_asleeps to show ex. 25 o'clock instead of 1 o'clock, for better plotting
+        fell_asleeps_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
+        fell_asleeps_24::Float64 = fell_asleeps_00 < 3 ? fell_asleeps_00 + 24 : fell_asleeps_00
+        # Converting to the right data-types, and pushing to the column vectors
+        push!(dates, Date(String(line_vec[1]), "dd.mm.yyyy"))
+        push!(fell_asleeps, fell_asleeps_24)
+        push!(woke_ups, Time(String(line_vec[3]), "HH:MM"))
+        push!(sleep_qualities, parse(Int, String(line_vec[4])))
+        push!(time_awakes, Time(String(line_vec[5]), "HH:MM"))
         push!(session_starts_vec, session_starts)
         push!(session_ends_vec, session_ends)
         push!(meal_befores_vec, meal_befores)
         push!(activities_vec, activities)
         push!(interest_levels_vec, interest_levels)
     end
+    # Return column vectors
     return (
            dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
            session_starts_vec, session_ends_vec, meal_befores_vec,
@@ -144,7 +153,7 @@ end
     dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
     session_starts_vec, session_ends_vec, meal_befores_vec,
     activities_vec, interest_levels_vec
-) = read_data()
+) = read_data("tom_session_data.txt")
 
 ############ Alternative structs ####################
 ################ Length 97 ##########################
