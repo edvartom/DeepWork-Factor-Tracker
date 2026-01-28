@@ -84,28 +84,28 @@ function generate_activities_and_interest_levels(activity_vec::Vector{Activity})
     return activity_title, interest_level
 end
 
-function data_to_file(filepath::String, activity_vec::Vector{Activity})
-    date::Vector{String} = generate_dates(nr_of_samples)
-    fell_asleep::Vector{String}, fell_asleep_float::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
-    woke_up::Vector{String}, woke_up_float::Vector{Float64} = generate_woke_ups(nr_of_samples)
-    sleep_quality::Vector{String} = generate_sleep_qualities(nr_of_samples)
-    hours_awake::Vector{String} = generate_hours_awakes(nr_of_samples)
-    nr_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
-    session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nr_of_sessions)*nr_of_samples))
-    interval_start::Vector{Float64} = woke_up_float .+ 1
-    fell_asleep_float = ifelse.(fell_asleep_float .< 6.0, fell_asleep_float .+ 24, fell_asleep_float)
-    interval_end::Vector{Float64} = fell_asleep_float[2:end] .- 1
-    push!(interval_end, 24.0)
+function data_to_file(filepath::String, activities_vec::Vector{Activity})
+    dates::Vector{String} = generate_dates(nr_of_samples)
+    fell_asleeps::Vector{String}, fell_asleep_floats::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
+    woke_ups::Vector{String}, woke_up_floats::Vector{Float64} = generate_woke_ups(nr_of_samples)
+    sleep_qualities::Vector{String} = generate_sleep_qualities(nr_of_samples)
+    hours_awakes::Vector{String} = generate_hours_awakes(nr_of_samples)
+    nrs_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
+    session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nrs_of_sessions)*nr_of_samples))
+    interval_starts::Vector{Float64} = woke_up_floats .+ 1
+    fell_asleep_floats = ifelse.(fell_asleep_floats .< 6.0, fell_asleep_floats .+ 24, fell_asleep_floats)
+    interval_ends::Vector{Float64} = fell_asleep_floats[2:end] .- 1
+    push!(interval_ends, 24.0)
     open(filepath, "w") do io
-        for i in eachindex(date)
+        for i in eachindex(dates)
             if !(i in session_indices)
                 write(
                     io,
-                    date[i] * ";" *
-                    fell_asleep[i] * ";" *
-                    woke_up[i] * ";" *
-                    sleep_quality[i] * ";" *
-                    hours_awake[i] * ";00:00;00:00;00:00;;0\n"
+                    dates[i] * ";" *
+                    fell_asleeps[i] * ";" *
+                    woke_ups[i] * ";" *
+                    sleep_qualities[i] * ";" *
+                    hours_awakes[i] * ";00:00;00:00;00:00;;0\n"
                 )
             else
                 session_starts::String = ""
@@ -115,8 +115,8 @@ function data_to_file(filepath::String, activity_vec::Vector{Activity})
                 interest_levels::String = ""
                 for j in session_indices
                     if j == i
-                        session_start::String, session_end::String, meal_before::String = generate_session_times(interval_start[i], interval_end[i])
-                        activity::String, interest_level::String = generate_activities_and_interest_levels(activity_vec)
+                        session_start::String, session_end::String, meal_before::String = generate_session_times(interval_starts[i], interval_ends[i])
+                        activity::String, interest_level::String = generate_activities_and_interest_levels(activities_vec)
                         session_starts *= session_start * ", "
                         session_ends *= session_end * ", "
                         meal_befores *= meal_before * ", "
@@ -132,11 +132,11 @@ function data_to_file(filepath::String, activity_vec::Vector{Activity})
                 interest_levels = interest_levels[1:end-2]
                 write(
                     io,
-                    date[i] * ";" *
-                    fell_asleep[i] * ";" *
-                    woke_up[i] * ";" *
-                    sleep_quality[i] * ";" *
-                    hours_awake[i] * ";" *
+                    dates[i] * ";" *
+                    fell_asleeps[i] * ";" *
+                    woke_ups[i] * ";" *
+                    sleep_qualities[i] * ";" *
+                    hours_awakes[i] * ";" *
                     session_starts * ";" * 
                     session_ends * ";" * 
                     meal_befores * ";" *
@@ -198,10 +198,10 @@ listening_to_records::Activity = Activity(
     "Listening to records", 6, [4,5,6,7,8,9,10]
 )
 
-activity_vec = [
+activity_acts = [
     bird_watching, solving_crossword, going_for_a_walk,
     woodworking, model_building, studying, resting, gardening,
     golfing, cooking, reading, listening_to_records
 ]
 
-data_to_file("tom_session_data.txt", activity_vec)
+data_to_file("tom_session_data.txt", activity_acts)
