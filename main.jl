@@ -141,8 +141,8 @@ end
 
 (
     dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
-    session_starts_vec, session_ends_vec, MEAL_BEFORE,
-    ACTIVITY, INTEREST_LEVEL
+    session_starts_vec, session_ends_vec, meal_befores_vec,
+    activities_vec, interest_levels_vec
 ) = read_data()
 
 ############ Alternative structs ####################
@@ -221,39 +221,39 @@ session_ends_pla::PlotAxis = PlotAxis(
     description = "End time of each deep work session"
 )
 
-duration_sessions::PlotAxis = PlotAxis(
+session_durations_pla::PlotAxis = PlotAxis(
     title = "Duration of sessions",
     data = Time.(session_ends_pla.data - session_starts_pla.data),
     label = "Duration of each deep work session",
     description = "Duration of each deep work session"
 )
 
-meal_before::PlotAxis = PlotAxis(
+meal_befores_pla::PlotAxis = PlotAxis(
     title = "Mealtime before", 
-    data = remove_zeros(vcat(MEAL_BEFORE...)),
+    data = remove_zeros(vcat(meal_befores_vec...)),
     label = "Time of the last meal\nbefore a deep work session",
     description = "Time of the last meal before a deep work session"
 )
 
-time_since_meal::PlotAxis = PlotAxis(
+times_since_meal_pla::PlotAxis = PlotAxis(
     title = "Time since meal",
-    data = remove_zeros(Time.(vcat((session_starts_vec - MEAL_BEFORE)...))),
+    data = remove_zeros(Time.(vcat((session_starts_vec - meal_befores_vec)...))),
     label = "Time from the last meal\nto the beginning of\nthe deep work session",
     description = "Time from the last meal to the beginning of the deep work session"
 )
 
-activity::PlotAxis = PlotAxis(
+activities_pla::PlotAxis = PlotAxis(
     title = "Activity",
-    data = remove_zeros(vcat(ACTIVITY...)),
+    data = remove_zeros(vcat(activities_vec...)),
     ticks = :all,
     rotation = 45,
     label = "What Tom was doing while\nconcentrating deeply",
     description = "What Tom was doing while concentrating deeply"
 )
 
-interest_level::PlotAxis = PlotAxis(
+interest_levels_pla::PlotAxis = PlotAxis(
     title = "Level of interest",
-    data = remove_zeros(vcat(INTEREST_LEVEL...)),
+    data = remove_zeros(vcat(interest_levels_vec...)),
     label = "How interested Tom was in what\nhe concentrated on from 1 to 10",
     description = "How interested Tom was in what he concentrated on from 1 to 10",
 )
@@ -261,7 +261,7 @@ interest_level::PlotAxis = PlotAxis(
 DATA_VEC::Vector{PlotAxis} = [
     dates_pla, fell_asleeps_pla, woke_ups_pla, time_awakes_pla, hours_of_sleeps_pla, sleep_qualities_pla,
     nrs_of_sessions_pla, tot_durations_sessions_pla, session_starts_pla, session_ends_pla, 
-    duration_sessions, meal_before, time_since_meal, activity, interest_level
+    session_durations_pla, meal_befores_pla, times_since_meal_pla, activities_pla, interest_levels_pla
 ]
 #####################################################
 
