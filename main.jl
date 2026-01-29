@@ -1,7 +1,7 @@
 # Include necessary packages
 using Dates, Plots, Plots.Measures
 
-# Read data from the file
+""" Read data from the file """
 function read_data(filepath::String)
     # Making one vector for each column in the file
     dates::Vector{Date} = []
@@ -49,7 +49,7 @@ function read_data(filepath::String)
            )
 end
 
-# Find nr of deep work sessions each day, and put them into a list
+""" Find nr of deep work sessions each day, and put them into a list """
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
     nrs_of_sessions::Vector{Int} = []
     # For every deep work session ...
@@ -66,12 +66,14 @@ function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_
     return nrs_of_sessions
 end
 
-function find_total_session_lengths(session_lengths_vec::Vector{Vector{Nanosecond}})
-    total_session_lengts::Vector{Time} = []
-    for vec::Vector{Nanosecond} in session_lengths_vec
-        push!(total_session_lengts, Time(sum(vec)))
+""" Find total duration of the deep work sessions each day, and put it into a list """
+function find_total_session_durations(session_durations_vec::Vector{Vector{Nanosecond}})
+    total_session_durations::Vector{Time} = []
+    for session_durations_this_day::Vector{Nanosecond} in session_durations_vec
+        tot_session_duration_this_day::Time = Time(sum(session_durations_this_day))
+        push!(total_session_durations, tot_session_duration_this_day)
     end
-    return total_session_lengts
+    return total_session_durations
 end
 
 function remove_zeros(vec)
@@ -215,7 +217,8 @@ nrs_of_sessions_pla::PlotAxis = PlotAxis(
 
 tot_durations_sessions_pla::PlotAxis = PlotAxis(
     title = "Total session duration",
-    data = find_total_session_lengths(session_starts_vec - session_ends_vec),
+    # Substracting two objects of type Vector{Vector{Time}}, gives an object of type Vector{Vector{Nanosecond}}:
+    data = find_total_session_durations(session_starts_vec - session_ends_vec),
     label = "Total duration of deep work sessions\nduring the day",
     description = "Total duration of deep work sessions during the day"
 )
