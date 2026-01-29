@@ -76,6 +76,7 @@ function find_total_session_durations(session_durations_vec::Vector{Vector{Nanos
     return total_session_durations
 end
 
+""" Remove zeroes or empty strings from a vector of type Vector{Time}, Vector{String} or Vector{Int} """
 function remove_zeros(vec)
     new_vec = []
     if typeof(vec) == Vector{Time}
@@ -88,6 +89,7 @@ function remove_zeros(vec)
     return new_vec
 end
 
+""" Struct defining an axis to be plotted, with default values """
 Base.@kwdef struct PlotAxis
     title::String = ""
     data::Vector{Any} = []
@@ -97,24 +99,27 @@ Base.@kwdef struct PlotAxis
     description::String = ""
 end
 
+""" Function making a scatter plot out of two PlotAxis objects """
 function plot_axes(x_pla::PlotAxis, y_pla::PlotAxis)
     if length(x_pla.data) != length(y_pla.data)
         error("error: You chose axes of different length.
 The length of the the x- and the y-array are $(length(x_pla.data)) and $(length(y_pla.data)).
 Please try again, and remember to read the instructions carefully.")
     end
+    # Plotting
     p = scatter(x_pla.data, y_pla.data;
         title = x_pla.title * " vs. " * lowercase(y_pla.title),
         titlefontsize = 12,
         xticks = x_pla.ticks,
         xrotation = x_pla.rotation,
         xlabel = x_pla.label,
-        xguidefontsize = 8,
+        xguidefontsize = 8,                 # Fontsize x-label
         yticks = y_pla.ticks,
         ylabel = y_pla.label,
-        yguidefontsize = 8,
+        yguidefontsize = 8,                 # Fontsize y-label
         legend = false,
-        marker = 2,
+        marker = 2,                         # Markersize
+        # Adjusting margins around the plot
         bottom_margin = 10mm,
         top_margin = 10mm,
         left_margin = 10mm,
