@@ -1,6 +1,10 @@
 # Include necessary packages
 using Dates, Plots, Plots.Measures
 
+#######################################################################################
+################################ Functions and structs ################################
+#######################################################################################
+
 """ Read data from the file """
 function read_data(filepath::String)
     # Making one vector for each column in the file
@@ -159,6 +163,10 @@ function ask_and_plot()
     savefig(p, "plot.pdf")
     return p
 end
+
+#######################################################################################
+################## Application of the previous functions and structs ##################
+#######################################################################################
 
 (
     dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,

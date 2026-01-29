@@ -1,4 +1,9 @@
+# Include necessary packages
 using Distributions
+
+#######################################################################################
+################################ Functions and structs ################################
+#######################################################################################
 
 function float_vec_to_time_strings(floats::Vector{Float64})
     hour_ints::Vector{Int64} = div.(floats, 1)
@@ -148,6 +153,10 @@ function data_to_file(filepath::String, activity_acts::Vector{Activity})
         end
     end
 end
+
+#######################################################################################
+################## Application of the previous functions and structs ##################
+#######################################################################################
 
 nr_of_samples = 100
 
