@@ -49,12 +49,16 @@ function read_data(filepath::String)
            )
 end
 
+# Find nr of deep work sessions each day, and put them into a list
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
     nrs_of_sessions::Vector{Int} = []
-    for i::Int in eachindex(session_starts_vec)
-        session_lengths::Vector{Nanosecond} = session_ends_vec[i] - session_starts_vec[i]
+    # For every deep work session ...
+    for day_nr::Int in eachindex(session_starts_vec)
+        session_lengths::Vector{Nanosecond} = session_ends_vec[day_nr] - session_starts_vec[day_nr]
+        # ... if the logged session does not have zero duration
         if session_lengths != [Nanosecond(0)]
-            push!(nrs_of_sessions, length(session_lengths))
+            nr_of_sessions_this_day::Int = length(session_lengths) 
+            push!(nrs_of_sessions, nr_of_sessions_this_day)
         else
             push!(nrs_of_sessions, 0)
         end
