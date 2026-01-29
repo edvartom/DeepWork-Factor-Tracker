@@ -138,15 +138,22 @@ function ask(x_pla::PlotAxis, axes_pla::Vector{PlotAxis})
         # ... make the x-axis
         println("What do you want on the x-axis?
 Choose a number:")
+        # Print the description of all the alternatives for the axis
         for i in eachindex(axes_pla)
             println(i, " ", axes_pla[i].description)
         end
+    # If the input axis has a length that is not equal to any of the lengths in the list of alternatives ...
     elseif !(length(x_pla.data) in length.(getproperty.(axes_pla, :data)))
+        # ... throw error
         error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x_pla.data), ")")
+    # Else you have chosen an axis with an existing length for the x-axis, and ...
     else
+        # ... you must choose what to plot on the y-axis
         println("What do you want on the y-axis?
 Choose a number:")
+        # Print the description of all the alternatives for the axis, unless ...
         for i in eachindex(axes_pla)
+            # ... it does not have the same length as the x-axis
             if length(axes_pla[i].data) == length(x_pla.data)
                 println(i, " ", axes_pla[i].description)
             end
@@ -154,6 +161,7 @@ Choose a number:")
     end
     println("DUE TO AN ERROR IN VSCODE, YOU MIGHT HAVE TO WRITE YOUR ANSWER TWO TIMES.
 PRESS ENTER AT THE END EACH TIME.")
+    # Parse the answer from the user into an integer
     answer::PlotAxis = axes_pla[parse(Int, readline())]
     return answer
 end
