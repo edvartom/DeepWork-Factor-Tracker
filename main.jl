@@ -131,34 +131,37 @@ Please try again, and remember to read the instructions carefully.")
     return p
 end
 
-function ask(x_pla::PlotAxis)
+""" Function that asks users what they want to plot """
+function ask(x_pla::PlotAxis, axes_pla::Vector{PlotAxis})
+    # If there is no x-axis already ...
     if length(x_pla.data) == 0
+        # ... make the x-axis
         println("What do you want on the x-axis?
 Choose a number:")
-        for i in eachindex(DATA_VEC)
-            println(i, " ", DATA_VEC[i].description)
+        for i in eachindex(axes_pla)
+            println(i, " ", axes_pla[i].description)
         end
-    elseif !(length(x_pla.data) in length.(getproperty.(DATA_VEC, :data)))
+    elseif !(length(x_pla.data) in length.(getproperty.(axes_pla, :data)))
         error("error: Error in the program itself. The array has a length that cannot be plotted (length: ", length(x_pla.data), ")")
     else
         println("What do you want on the y-axis?
 Choose a number:")
-        for i in eachindex(DATA_VEC)
-            if length(DATA_VEC[i].data) == length(x_pla.data)
-                println(i, " ", DATA_VEC[i].description)
+        for i in eachindex(axes_pla)
+            if length(axes_pla[i].data) == length(x_pla.data)
+                println(i, " ", axes_pla[i].description)
             end
         end
     end
     println("DUE TO AN ERROR IN VSCODE, YOU MIGHT HAVE TO WRITE YOUR ANSWER TWO TIMES.
 PRESS ENTER AT THE END EACH TIME.")
-    answer::PlotAxis = DATA_VEC[parse(Int, readline())]
+    answer::PlotAxis = axes_pla[parse(Int, readline())]
     return answer
 end
 
-function ask_and_plot()
+function ask_and_plot(axes_pla::Vector{PlotAxis})
     old_x_pla::PlotAxis = PlotAxis()
-    x_pla::PlotAxis = ask(old_x_pla)
-    y_pla::PlotAxis = ask(x_pla)
+    x_pla::PlotAxis = ask(old_x_pla, axes_pla)
+    y_pla::PlotAxis = ask(x_pla, axes_pla)
     p = plot_axes(x_pla, y_pla)
     savefig(p, "plot.pdf")
     return p
@@ -289,11 +292,11 @@ interest_levels_pla::PlotAxis = PlotAxis(
     description = "How interested Tom was in what he concentrated on from 1 to 10",
 )
 #################### Data_vector ####################
-DATA_VEC::Vector{PlotAxis} = [
+axes_pla::Vector{PlotAxis} = [
     dates_pla, fell_asleeps_pla, woke_ups_pla, time_awakes_pla, hours_of_sleeps_pla, sleep_qualities_pla,
     nrs_of_sessions_pla, tot_durations_sessions_pla, session_starts_pla, session_ends_pla, 
     session_durations_pla, meal_befores_pla, times_since_meal_pla, activities_pla, interest_levels_pla
 ]
 #####################################################
 
-ask_and_plot()
+ask_and_plot(axes_pla)
