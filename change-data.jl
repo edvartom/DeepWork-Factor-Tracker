@@ -5,12 +5,17 @@ using Dates, Distributions
 ################################ Functions and structs ################################
 #######################################################################################
 
-
+"""Function that converts a vector of floats to a vector of strings on the format 'HH:MM'"""
 function floats_to_time_strings(floats::Vector{Float64})
+    # The hours is just the int after removing the decimals from the float:
     hour_ints::Vector{Int64} = div.(floats, 1)
+    # Converting the numbers after the decimal point to minutes
+    # Example: The float 0.5 means 30 minutes:
     minute_ints::Vector{Int64} = floor.(mod.(floats, 1)*60)
+    # Converting to strings:
     hour_strs::Vector{String} = string.(hour_ints)
     minute_strs::Vector{String} = string.(minute_ints)
+    # Making each hour- and minute-string contain exactly two digits:
     for i in eachindex(hour_strs)
         if length(hour_strs[i]) == 1
             hour_strs[i] = "0" * hour_strs[i]
@@ -19,9 +24,11 @@ function floats_to_time_strings(floats::Vector{Float64})
             minute_strs[i] = "0" * minute_strs[i]
         end
         if (length(hour_strs[i]) != 2) || (length(minute_strs[i]) != 2)
+            # Throwing error if the hours and minutes do not consist of two digits
             error("error: length(hour_strs) != 2 OR length(minute_strs) != 2\nlength(hour_strs): $length(hour_strs)\nlength(minute_strs): $length(minute_strs)")
         end
     end
+    # Make final vector of the format "HH:MM" (hour hour:minute minute)
     time_strs::Vector{String} = hour_strs .* ":" .* minute_strs
     return time_strs
 end
