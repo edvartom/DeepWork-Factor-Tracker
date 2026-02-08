@@ -134,8 +134,8 @@ function generate_session_times(interval_start::Float64, interval_end::Float64)
 end
 
 struct Activity
-    title::String
-    time_amount::Int64 # Number from 1 to 10, amount of day spent on this activity
+    title::String # Activity name
+    time_amount::Int64 # Number from 1 to 10, how much of the day spent on this activity
     interest_level::Array{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
 end
 
