@@ -136,9 +136,32 @@ end
 struct Activity
     title::String # Activity name
     time_amount::Int64 # Number from 1 to 10, how much of the day spent on this activity
-    interest_level::Array{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
+    interest_level::Vector{Int64} # Numbers from 1 to 10, how interesting what is concentrates on is
 end
 
+"""
+    generate_activities_and_interest_levels(activity_acts::Vector{Activity})
+
+Function that chooses randomly from a given activity_acts what activity Tom 
+was doing during each deep work session, and returns the activity names 
+and a random interest level (to reflect how interesting Tom finds the topic 
+on which he is concentrating) for each deep work session.
+
+# Arguments
+- `activity_acts::Vector{Activity}`: List of activity-structs.
+    
+# Returns
+- `Vector{String}`: Vector of names of the randomly chosen activities.
+- `Vector{String}`: Vector of interest level values randomly chosen from the 
+                    list of interest levels for each activity-struct.
+
+# Examples
+julia> generate_activities_and_interest_levels([Activity(Bowling, 3, [1,2,3]), Activity(Reading, 8, [4,5,6])])
+([Reading, Reading, Bowling], [6,4,1]) # Reading is more likely, since it has time_amount = 8 instead of time_amount = 3
+
+julia> generate_activities_and_interest_levels([Activity(Bowling, 3, [1,2,3]), Activity(Reading, 8, [4,5,6])])
+([Reading, Reading, Reading], [5,4,5]) # Reading is more likely, since it has time_amount = 8 instead of time_amount = 3
+"""
 function generate_activities_and_interest_levels(activity_acts::Vector{Activity})
     activity_time_amounts::Vector{Int64} = getproperty.(activity_acts, :time_amount)
     activity_index::Int64 = rand(Categorical(activity_time_amounts ./ sum(activity_time_amounts)))

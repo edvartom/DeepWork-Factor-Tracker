@@ -1,5 +1,6 @@
 - Fill code with comments
 - Change oneline docstrings to only one " on each side
+- Remove "Function that"
 - Int to Int64
 - Vectorize find_nrs_of_sessions(...) (see bok 2 for notes on how)
 - Something is wrong with total duration of deep work sessions vs. dates
