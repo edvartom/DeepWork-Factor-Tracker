@@ -1,5 +1,5 @@
 # Include necessary packages
-using Distributions
+using Dates, Distributions
 
 #######################################################################################
 ################################ Functions and structs ################################
@@ -89,7 +89,7 @@ function generate_activities_and_interest_levels(activity_acts::Vector{Activity}
     return activity_title, interest_level
 end
 
-function data_to_file(filepath::String, activity_acts::Vector{Activity})
+function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vector{Activity})
     dates::Vector{String} = generate_dates(nr_of_samples)
     fell_asleeps::Vector{String}, fell_asleep_floats::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
     woke_ups::Vector{String}, woke_up_floats::Vector{Float64} = generate_woke_ups(nr_of_samples)
@@ -214,4 +214,4 @@ activity_acts = [
     golfing, cooking, reading, listening_to_records
 ]
 
-data_to_file("tom_session_data.txt", activity_acts)
+data_to_file(nr_of_samples, "tom_session_data.txt", activity_acts)
