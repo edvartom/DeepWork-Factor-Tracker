@@ -95,11 +95,14 @@ end
 
 """ Struct defining an axis to be plotted, with default values """
 Base.@kwdef struct PlotAxis
+    # Half of plot-title is from each axis:
     title::String = ""
+    # Data to plot on the given axis:
     data::Vector{Any} = []
-    ticks::Any = :auto
-    rotation::Int = 0
-    label::String = ""
+    ticks::Any = :auto          # Axis ticks
+    rotation::Int = 0           # Rotation of the ticks
+    label::String = ""          # Axis label
+    # Description of what is plotted on the axes:
     description::String = ""
 end
 
