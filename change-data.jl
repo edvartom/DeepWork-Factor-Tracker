@@ -55,16 +55,21 @@ function generate_fell_asleeps(len::Int64)
     return fell_asleep_strs, fell_asleep_floats_00
 end
 
+"""Function that generates the times at which Tom woke up in the morning"""
 function generate_woke_ups(len::Int64)
     woke_up_floats::Vector{Float64} = rand(Normal(9.0, 2.0), len)
+    # Once a week he has a duty which forces him to get up early: 
     for i in [1:7:length(woke_up_floats)]
         woke_up_floats[i] .= 7.0
     end
+    # Converting floats to time-strings of the format 'HH:MM'
     woke_up_strs::Vector{String} = floats_to_time_strings(woke_up_floats)
     return woke_up_strs, woke_up_floats
 end
 
+"""Function that generates the sleep quality for each night"""
 function generate_sleep_qualities(len::Int64)
+    # Sleep quality is shown on a range from 1 to 10
     sleep_quality_ints::Vector{Int64} = ceil.(Int64, 10*rand(len))
     return string.(sleep_quality_ints)
 end
