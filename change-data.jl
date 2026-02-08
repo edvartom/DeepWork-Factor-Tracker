@@ -44,7 +44,7 @@ function generate_dates(len::Int64)
     return date_strs
 end
 
-"""Function that generates the times at which Tom fell asleep at night"""
+"""Function that randomly generates the times at which Tom fell asleep at night"""
 function generate_fell_asleeps(len::Int64)
     # Generating floats that can be greater than 24:
     fell_asleep_floats_24::Vector{Float64} = rand(Normal(23.5, 1.0), len)
@@ -55,7 +55,7 @@ function generate_fell_asleeps(len::Int64)
     return fell_asleep_strs, fell_asleep_floats_00
 end
 
-"""Function that generates the times at which Tom woke up in the morning"""
+"""Function that randomly generates the times at which Tom woke up in the morning"""
 function generate_woke_ups(len::Int64)
     woke_up_floats::Vector{Float64} = rand(Normal(9.0, 2.0), len)
     # Once a week he has a duty which forces him to get up early: 
@@ -67,28 +67,67 @@ function generate_woke_ups(len::Int64)
     return woke_up_strs, woke_up_floats
 end
 
-"""Function that generates the sleep quality for each night"""
+"""Function that randomly generates the sleep quality for each night"""
 function generate_sleep_qualities(len::Int64)
     # Sleep quality is shown on a range from 1 to 10
     sleep_quality_ints::Vector{Int64} = ceil.(Int64, 10*rand(len))
     return string.(sleep_quality_ints)
 end
 
+"""Function that randomly generates how many hours Tom was awake each night"""
 function generate_hours_awakes(len::Int64)
     hours_awake_floats::Vector{Float64} = rand(Normal(0.5, 0.7), len)
+    # Take away negative time awake
     hours_awake_floats[hours_awake_floats .< 0] .= 0
+    # Converting floats to time-strings of the format 'HH:MM'
     hours_awake_strs::Vector{String} = floats_to_time_strings(hours_awake_floats)
     return hours_awake_strs
 end
 
+"""
+    generate_session_times(interval_start::Float64, interval_end::Float64)
+
+Generate somewhat random session times, including the start-time and end-time of the
+session and the last time Tom ate before the session. The generated times must fall 
+within the time interval in wich Tom is awake during the day (e.g. he cannot have a 
+deep work session after going to sleep for the night or before waking up in the morning).
+
+# Arguments
+- `interval_start::Float64`: Some time (about 1 hour) after Tom woke up the current morning.
+- `interval_end::Float64`: Some time (about 1 hour) before Tom fell asleep at the night.
+    
+# Returns
+- `String`: The start time of the deep work session the current day on the format 'HH:MM'.
+- `String`: The end time of the deep work session the current day on the format 'HH:MM'.
+- `String`: The time of the Tom's last meal before the deep work session on the format 'HH:MM'.
+
+# Examples
+julia> generate_session_times(10.0, 23.0)
+(12.33, 13.02, 11.10)
+
+julia> generate_session_times(10.0, 23.0)
+(21.14, 21.52, 20.10)
+
+julia> generate_session_times(11.30, 21.05)
+(22.04, 22.32, 20.07)
+"""
 function generate_session_times(interval_start::Float64, interval_end::Float64)
+    # First, generate the duration of the deep work session
     session_duration::Float64 = rand(Normal(0.5, 0.25))
+    # The duration of the deep work session should at least be 0.25 hours,
+    # so shorter time streched is extended to 0.25 hours.
     session_duration = session_duration < 0.25 ? 0.25 : session_duration
+    # Second generate how long it has been since Tom's last meal
     time_since_meal::Float64 = rand(Normal(2.0, 1.0))
+    # The time since Tom's last meal should be at least 0.05 hours
+    # so shorter times since the last meal is extended to 0.05 hours
     time_since_meal = time_since_meal < 0.05 ? 0.05 : time_since_meal
+    # Generate random time for the deep work session to start in the interval where Tom is awake
     session_start_float::Float64 = rand().*(interval_end - interval_start - session_duration - time_since_meal) .+ interval_start .+ time_since_meal
+    # Session end time and the time he ate is calculated with the start time as reference
     session_end_float::Float64 = session_start_float + session_duration
     meal_before_float::Float64 = session_start_float - time_since_meal
+    # Converting floats to time-strings of the format 'HH:MM'
     session_start_str::String, session_end_str::String, meal_before_str::String = (
         floats_to_time_strings([session_start_float, session_end_float, meal_before_float]))
     return session_start_str, session_end_str, meal_before_str
