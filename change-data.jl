@@ -5,7 +5,8 @@ using Dates, Distributions
 ################################ Functions and structs ################################
 #######################################################################################
 
-function float_vec_to_time_strings(floats::Vector{Float64})
+
+function floats_to_time_strings(floats::Vector{Float64})
     hour_ints::Vector{Int64} = div.(floats, 1)
     minute_ints::Vector{Int64} = floor.(mod.(floats, 1)*60)
     hour_strs::Vector{String} = string.(hour_ints)
@@ -35,7 +36,7 @@ end
 function generate_fell_asleeps(len::Int64)
     fell_asleep_floats_24::Vector{Float64} = rand(Normal(23.5, 1.0), len)
     fell_asleep_floats_00::Vector{Float64} = ifelse.(fell_asleep_floats_24 .>= 24, fell_asleep_floats_24 .- 24, fell_asleep_floats_24)
-    fell_asleep_strs::Vector{String} = float_vec_to_time_strings(fell_asleep_floats_00)
+    fell_asleep_strs::Vector{String} = floats_to_time_strings(fell_asleep_floats_00)
     return fell_asleep_strs, fell_asleep_floats_00
 end
 
@@ -44,7 +45,7 @@ function generate_woke_ups(len::Int64)
     for i in [1:7:length(woke_up_floats)]
         woke_up_floats[i] .= 7.0
     end
-    woke_up_strs::Vector{String} = float_vec_to_time_strings(woke_up_floats)
+    woke_up_strs::Vector{String} = floats_to_time_strings(woke_up_floats)
     return woke_up_strs, woke_up_floats
 end
 
@@ -56,7 +57,7 @@ end
 function generate_hours_awakes(len::Int64)
     hours_awake_floats::Vector{Float64} = rand(Normal(0.5, 0.7), len)
     hours_awake_floats[hours_awake_floats .< 0] .= 0
-    hours_awake_strs::Vector{String} = float_vec_to_time_strings(hours_awake_floats)
+    hours_awake_strs::Vector{String} = floats_to_time_strings(hours_awake_floats)
     return hours_awake_strs
 end
 
@@ -69,7 +70,7 @@ function generate_session_times(interval_start::Float64, interval_end::Float64)
     session_end_float::Float64 = session_start_float + session_duration
     meal_before_float::Float64 = session_start_float - time_since_meal
     session_start_str::String, session_end_str::String, meal_before_str::String = (
-        float_vec_to_time_strings([session_start_float, session_end_float, meal_before_float]))
+        floats_to_time_strings([session_start_float, session_end_float, meal_before_float]))
     return session_start_str, session_end_str, meal_before_str
 end
 
