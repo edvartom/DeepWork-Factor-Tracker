@@ -33,16 +33,24 @@ function floats_to_time_strings(floats::Vector{Float64})
     return time_strs
 end
 
+"""Function that generates a vector of a specified length 
+containing consecutive dates from and including 01.01.2026"""
 function generate_dates(len::Int64)
     start_date::Date = Date(2026, 1, 1)
+    # Making the dates
     date_dates::Vector{Date} = collect(start_date : Day(1) : start_date + Day(len - 1))
+    # Converting the dates to the right format string to be in the file
     date_strs::Vector{String} = Dates.format.(date_dates, "dd.mm.yyyy")
     return date_strs
 end
 
+"""Function that generates the times at which Tom fell asleep at night"""
 function generate_fell_asleeps(len::Int64)
+    # Generating floats that can be greater than 24:
     fell_asleep_floats_24::Vector{Float64} = rand(Normal(23.5, 1.0), len)
+    # Floats that are greater than or equal to 24 are forced to start at 0 again
     fell_asleep_floats_00::Vector{Float64} = ifelse.(fell_asleep_floats_24 .>= 24, fell_asleep_floats_24 .- 24, fell_asleep_floats_24)
+    # Converting floats to time-strings of the format 'HH:MM'
     fell_asleep_strs::Vector{String} = floats_to_time_strings(fell_asleep_floats_00)
     return fell_asleep_strs, fell_asleep_floats_00
 end
