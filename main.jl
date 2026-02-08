@@ -166,11 +166,16 @@ PRESS ENTER AT THE END EACH TIME.")
     return answer
 end
 
+"""Function that asks what the user wants to plot on the x- and y-axis and plots it"""
 function ask_and_plot(axes_pla::Vector{PlotAxis})
     old_x_pla::PlotAxis = PlotAxis()
+    # Since old_x_pla is empty, ask() will ask what the user wants to plot on the x-axis:
     x_pla::PlotAxis = ask(old_x_pla, axes_pla)
+    # ask() will ask the user what to plot on the y-axis with the same length as the x-axis:
     y_pla::PlotAxis = ask(x_pla, axes_pla)
+    # Plotting:
     p = plot_axes(x_pla, y_pla)
+    # Saving plot to pdf-file:
     savefig(p, "plot.pdf")
     return p
 end
