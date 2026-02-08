@@ -184,14 +184,15 @@ end
 ################## Application of the previous functions and structs ##################
 #######################################################################################
 
+# Reading data from file into files
 (
     dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
     session_starts_vec, session_ends_vec, meal_befores_vec,
     activities_vec, interest_levels_vec
 ) = read_data("tom_session_data.txt")
 
-############ Alternative structs ####################
-################ Length 97 ##########################
+############ Structs for x- and y-axis with length nr_of_samples ############
+
 dates_pla::PlotAxis = PlotAxis(
     title = "Dates",
     data = dates,
@@ -252,8 +253,8 @@ tot_durations_sessions_pla::PlotAxis = PlotAxis(
     description = "Total duration of deep work sessions during the day"
 )
 
-############ Alternative structs ####################
-################ Length 39 ##########################
+############ Structs for x- and y-axis with length length(total_nr_of_sessions) ############
+
 session_starts_pla::PlotAxis = PlotAxis(
     title = "Session start",
     data = remove_zeros(vcat(session_starts_vec...)),
@@ -304,12 +305,13 @@ interest_levels_pla::PlotAxis = PlotAxis(
     label = "How interested Tom was in what\nhe concentrated on from 1 to 10",
     description = "How interested Tom was in what he concentrated on from 1 to 10",
 )
+
 #################### Data_vector ####################
 axes_pla::Vector{PlotAxis} = [
     dates_pla, fell_asleeps_pla, woke_ups_pla, time_awakes_pla, hours_of_sleeps_pla, sleep_qualities_pla,
     nrs_of_sessions_pla, tot_durations_sessions_pla, session_starts_pla, session_ends_pla, 
     session_durations_pla, meal_befores_pla, times_since_meal_pla, activities_pla, interest_levels_pla
 ]
-#####################################################
 
+# Running program -> ask what to plot on each axis and plot it
 ask_and_plot(axes_pla)
