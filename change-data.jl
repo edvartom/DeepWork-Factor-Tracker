@@ -113,7 +113,7 @@ julia> generate_session_times(11.30, 21.05)
 """
 function generate_session_times(interval_start::Float64, interval_end::Float64)
     # First, generate the duration of the deep work session
-    session_duration::Float64 = rand(Normal(0.5, 0.25))
+    session_duration::Float64 = rand(Normal(0.9, 0.25))
     # The duration of the deep work session should at least be 0.25 hours,
     # so shorter time streched is extended to 0.25 hours.
     session_duration = session_duration < 0.25 ? 0.25 : session_duration
@@ -264,7 +264,7 @@ end
 ################## Application of the previous functions and structs ##################
 #######################################################################################
 
-nr_of_samples = 100 # Tom did his survey for this many days.
+nr_of_samples = 1000 # Tom did his survey for this many days.
 
 ### Making all the different activities, with their corresponding time amounts and interest levels:
 
