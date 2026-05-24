@@ -177,7 +177,7 @@ function generate_activities_and_interest_levels(activity_acts::Vector{Activity}
 end
 
 "Uses other functions to find data that it writes to file"
-function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vector{Activity})
+function data_to_file(nr_of_samples::Int64, filepath::String, activity_acts::Vector{Activity})
     ### Generating everyday data by using other functions: ###
     dates::Vector{String} = generate_dates(nr_of_samples)
     fell_asleeps::Vector{String}, fell_asleep_floats::Vector{Float64} = generate_fell_asleeps(nr_of_samples)

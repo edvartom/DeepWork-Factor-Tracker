@@ -11,13 +11,13 @@ function read_data(filepath::String)
     dates::Vector{Date} = []
     fell_asleeps::Vector{Float64} = []
     woke_ups::Vector{Time} = []
-    sleep_qualities::Vector{Int} = []
+    sleep_qualities::Vector{Int64} = []
     time_awakes::Vector{Time} = []
     session_starts_vec::Vector{Vector{Time}} = []
     session_ends_vec::Vector{Vector{Time}} = []
     meal_befores_vec::Vector{Vector{Time}} = []
     activities_vec::Vector{Vector{String}} = []
-    interest_levels_vec::Vector{Vector{Int}} = []
+    interest_levels_vec::Vector{Vector{Int64}} = []
     # Gather all of the lines into a variable
     all_lines::Vector{String} = collect(eachline(filepath))
     # Process each line
@@ -29,7 +29,7 @@ function read_data(filepath::String)
         session_ends::Vector{Time} = Time.(String.(split(line_vec[7], ", ")), "HH:MM")
         meal_befores::Vector{Time} = Time.(String.(split(line_vec[8], ", ")), "HH:MM")
         activities::Vector{String} = String.(split(line_vec[9], ", "))
-        interest_levels::Vector{Int} = parse.(Int, String.(split(line_vec[10], ", ")))
+        interest_levels::Vector{Int64} = parse.(Int64, String.(split(line_vec[10], ", ")))
         # Adjusting fell_asleeps to show ex. 25 o'clock instead of 1 o'clock, for better plotting
         fell_asleeps_00::Float64 = Dates.value(Time(String(line_vec[2]), "HH:MM"))/3600e9
         fell_asleeps_24::Float64 = fell_asleeps_00 < 3 ? fell_asleeps_00 + 24 : fell_asleeps_00
@@ -37,7 +37,7 @@ function read_data(filepath::String)
         push!(dates, Date(String(line_vec[1]), "dd.mm.yyyy"))
         push!(fell_asleeps, fell_asleeps_24)
         push!(woke_ups, Time(String(line_vec[3]), "HH:MM"))
-        push!(sleep_qualities, parse(Int, String(line_vec[4])))
+        push!(sleep_qualities, parse(Int64, String(line_vec[4])))
         push!(time_awakes, Time(String(line_vec[5]), "HH:MM"))
         push!(session_starts_vec, session_starts)
         push!(session_ends_vec, session_ends)
@@ -55,13 +55,13 @@ end
 
 "Find nr of deep work sessions each day, and put them into a list"
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
-    nrs_of_sessions::Vector{Int} = []
+    nrs_of_sessions::Vector{Int64} = []
     # For every deep work session ...
-    for day_nr::Int in eachindex(session_starts_vec)
+    for day_nr::Int64 in eachindex(session_starts_vec)
         session_lengths::Vector{Nanosecond} = session_ends_vec[day_nr] - session_starts_vec[day_nr]
         # ... if the logged session does not have zero duration
         if session_lengths != [Nanosecond(0)]
-            nr_of_sessions_this_day::Int = length(session_lengths) 
+            nr_of_sessions_this_day::Int64 = length(session_lengths) 
             push!(nrs_of_sessions, nr_of_sessions_this_day)
         else
             push!(nrs_of_sessions, 0)
@@ -80,14 +80,14 @@ function find_total_session_durations(session_durations_vec::Vector{Vector{Nanos
     return total_session_durations
 end
 
-"Remove zeroes or empty strings from a vector of type Vector{Time}, Vector{String} or Vector{Int}"
+"Remove zeroes or empty strings from a vector of type Vector{Time}, Vector{String} or Vector{Int64}"
 function remove_zeros(vec)
     new_vec = []
     if typeof(vec) == Vector{Time}
         new_vec = vec[vec .!= Time(0,0,0)]
     elseif typeof(vec) == Vector{String}
         new_vec = vec[vec .!= ""]
-    elseif typeof(vec) == Vector{Int}
+    elseif typeof(vec) == Vector{Int64}
         new_vec = vec[vec .!= 0]
     end
     return new_vec
@@ -100,7 +100,7 @@ Base.@kwdef struct PlotAxis
     # Data to plot on the given axis:
     data::Vector{Any} = []
     ticks::Any = :auto          # Axis ticks
-    rotation::Int = 0           # Rotation of the ticks
+    rotation::Int64 = 0           # Rotation of the ticks
     label::String = ""          # Axis label
     # Description of what is plotted on the axes:
     description::String = ""
@@ -165,7 +165,7 @@ Choose a number:")
     println("DUE TO AN ERROR IN VSCODE, YOU MIGHT HAVE TO WRITE YOUR ANSWER TWO TIMES.
 PRESS ENTER AT THE END EACH TIME.")
     # Parse the answer from the user into an integer
-    answer::PlotAxis = axes_pla[parse(Int, readline())]
+    answer::PlotAxis = axes_pla[parse(Int64, readline())]
     return answer
 end
 
