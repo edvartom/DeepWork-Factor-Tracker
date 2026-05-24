@@ -176,22 +176,35 @@ function generate_activities_and_interest_levels(activity_acts::Vector{Activity}
     return activity_title, interest_level
 end
 
+"""Function that uses other functions to find data that it writes to file"""
 function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vector{Activity})
+    ### Generating everyday data by using other functions: ###
     dates::Vector{String} = generate_dates(nr_of_samples)
     fell_asleeps::Vector{String}, fell_asleep_floats::Vector{Float64} = generate_fell_asleeps(nr_of_samples)
     woke_ups::Vector{String}, woke_up_floats::Vector{Float64} = generate_woke_ups(nr_of_samples)
     sleep_qualities::Vector{String} = generate_sleep_qualities(nr_of_samples)
     hours_awakes::Vector{String} = generate_hours_awakes(nr_of_samples)
+    # Find random number of sessions that tom experiences in total during his survey
     nrs_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
+    ### Generating data closer related to the deep work sessions: ###
+    # Find random indices that correspond to the days Tom experiensed a deep work session:
     session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nrs_of_sessions)*nr_of_samples))
+    # Ensure that no deep work session takes place before 1 hour after Tom wakes up:
     interval_starts::Vector{Float64} = woke_up_floats .+ 1
+    # Make fell_asleep_floats go above hour 23.59 at night. (If tom fell asleep at 1 o'clock, it will be written as 25 o'clock)
+    # (Here, assuming he never fell asleep after 06:00 in the morning):
     fell_asleep_floats = ifelse.(fell_asleep_floats .< 6.0, fell_asleep_floats .+ 24, fell_asleep_floats)
+    # Ensure that no deep work session takes place after 1 hour before Tom falls asleep
+    # (He has no deep work sessions while brushing his teeth)
     interval_ends::Vector{Float64} = fell_asleep_floats[2:end] .- 1
+    # The day after the last morning he is assumed to falls asleep at 01:00.
     push!(interval_ends, 24.0)
     open(filepath, "w") do io
+        # Write header to file
         write(io, "Dates;Fell asleep;Woke up;Sleep quality;Hours awake;Session start;Session end;Time since meal;Activity;Interest level\n")
-        for i in eachindex(dates)
-            if !(i in session_indices)
+        for i in eachindex(dates) # For each day ..
+            if !(i in session_indices) # ... if he did not experience a deep work sesson ...
+                # ... write down the general data for a day without a deep work session
                 write(
                     io,
                     dates[i] * ";" *
@@ -201,15 +214,20 @@ function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vecto
                     hours_awakes[i] * ";00:00;00:00;00:00;;0\n"
                 )
             else
+                # Setting up for data generation for days with deep work session:
                 session_starts::String = ""
                 session_ends::String = ""
                 meal_befores::String = ""
                 activities::String = ""
                 interest_levels::String = ""
+                # Looping through session indices. For loop must be there, since session_indices might contain more of the same number.
+                # So for each day with deep work sessions, the loop runs for as many times as there are deep work sessions that day.
                 for j in session_indices
                     if j == i
+                        # Generate data relating to the deep work session:
                         session_start::String, session_end::String, meal_before::String = generate_session_times(interval_starts[i], interval_ends[i])
                         activity::String, interest_level::String = generate_activities_and_interest_levels(activity_acts)
+                        # Between each loop there times are separated by comma and space:
                         session_starts *= session_start * ", "
                         session_ends *= session_end * ", "
                         meal_befores *= meal_before * ", "
@@ -223,6 +241,7 @@ function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vecto
                 meal_befores = meal_befores[1:end-2]
                 activities = activities[1:end-2]
                 interest_levels = interest_levels[1:end-2]
+                # Write day with deep work sessin to file
                 write(
                     io,
                     dates[i] * ";" *
