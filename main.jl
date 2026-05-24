@@ -5,7 +5,7 @@ using Dates, Plots, Plots.Measures
 ################################ Functions and structs ################################
 #######################################################################################
 
-""" Read data from the file """
+" Read data from the file "
 function read_data(filepath::String)
     # Making one vector for each column in the file
     dates::Vector{Date} = []
@@ -53,7 +53,7 @@ function read_data(filepath::String)
            )
 end
 
-""" Find nr of deep work sessions each day, and put them into a list """
+" Find nr of deep work sessions each day, and put them into a list "
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
     nrs_of_sessions::Vector{Int} = []
     # For every deep work session ...
@@ -70,7 +70,7 @@ function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_
     return nrs_of_sessions
 end
 
-""" Find total duration of the deep work sessions each day, and put it into a list """
+" Find total duration of the deep work sessions each day, and put it into a list "
 function find_total_session_durations(session_durations_vec::Vector{Vector{Nanosecond}})
     total_session_durations::Vector{Time} = []
     for session_durations_this_day::Vector{Nanosecond} in session_durations_vec
@@ -80,7 +80,7 @@ function find_total_session_durations(session_durations_vec::Vector{Vector{Nanos
     return total_session_durations
 end
 
-""" Remove zeroes or empty strings from a vector of type Vector{Time}, Vector{String} or Vector{Int} """
+" Remove zeroes or empty strings from a vector of type Vector{Time}, Vector{String} or Vector{Int} "
 function remove_zeros(vec)
     new_vec = []
     if typeof(vec) == Vector{Time}
@@ -93,7 +93,7 @@ function remove_zeros(vec)
     return new_vec
 end
 
-""" Struct defining an axis to be plotted, with default values """
+" Struct defining an axis to be plotted, with default values "
 Base.@kwdef struct PlotAxis
     # Half of plot-title is from each axis:
     title::String = ""
@@ -106,7 +106,7 @@ Base.@kwdef struct PlotAxis
     description::String = ""
 end
 
-""" Function making a scatter plot out of two PlotAxis objects """
+" Function making a scatter plot out of two PlotAxis objects "
 function plot_axes(x_pla::PlotAxis, y_pla::PlotAxis)
     if length(x_pla.data) != length(y_pla.data)
         error("error: You chose axes of different length.
@@ -134,7 +134,7 @@ Please try again, and remember to read the instructions carefully.")
     return p
 end
 
-""" Function that asks users what they want to plot """
+" Function that asks users what they want to plot "
 function ask(x_pla::PlotAxis, axes_pla::Vector{PlotAxis})
     # If there is no x-axis already ...
     if length(x_pla.data) == 0
@@ -169,7 +169,7 @@ PRESS ENTER AT THE END EACH TIME.")
     return answer
 end
 
-"""Function that asks what the user wants to plot on the x- and y-axis and plots it"""
+"Function that asks what the user wants to plot on the x- and y-axis and plots it"
 function ask_and_plot(axes_pla::Vector{PlotAxis})
     old_x_pla::PlotAxis = PlotAxis()
     # Since old_x_pla is empty, ask() will ask what the user wants to plot on the x-axis:

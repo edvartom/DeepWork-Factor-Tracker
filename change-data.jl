@@ -5,7 +5,7 @@ using Dates, Distributions
 ################################ Functions and structs ################################
 #######################################################################################
 
-"""Function that converts a vector of floats to a vector of strings on the format 'HH:MM'"""
+"Function that converts a vector of floats to a vector of strings on the format 'HH:MM'"
 function floats_to_time_strings(floats::Vector{Float64})
     # The hours is just the int after removing the decimals from the float:
     hour_ints::Vector{Int64} = div.(floats, 1)
@@ -44,7 +44,7 @@ function generate_dates(len::Int64)
     return date_strs
 end
 
-"""Function that randomly generates the times at which Tom fell asleep at night"""
+"Function that randomly generates the times at which Tom fell asleep at night"
 function generate_fell_asleeps(len::Int64)
     # Generating floats that can be greater than 24:
     fell_asleep_floats_24::Vector{Float64} = rand(Normal(23.5, 1.0), len)
@@ -55,7 +55,7 @@ function generate_fell_asleeps(len::Int64)
     return fell_asleep_strs, fell_asleep_floats_00
 end
 
-"""Function that randomly generates the times at which Tom woke up in the morning"""
+"Function that randomly generates the times at which Tom woke up in the morning"
 function generate_woke_ups(len::Int64)
     woke_up_floats::Vector{Float64} = rand(Normal(9.0, 2.0), len)
     # Once a week he has a duty which forces him to get up early: 
@@ -67,14 +67,14 @@ function generate_woke_ups(len::Int64)
     return woke_up_strs, woke_up_floats
 end
 
-"""Function that randomly generates the sleep quality for each night"""
+"Function that randomly generates the sleep quality for each night"
 function generate_sleep_qualities(len::Int64)
     # Sleep quality is shown on a range from 1 to 10
     sleep_quality_ints::Vector{Int64} = ceil.(Int64, 10*rand(len))
     return string.(sleep_quality_ints)
 end
 
-"""Function that randomly generates how many hours Tom was awake each night"""
+"Function that randomly generates how many hours Tom was awake each night"
 function generate_hours_awakes(len::Int64)
     hours_awake_floats::Vector{Float64} = rand(Normal(0.5, 0.7), len)
     # Take away negative time awake
@@ -176,7 +176,7 @@ function generate_activities_and_interest_levels(activity_acts::Vector{Activity}
     return activity_title, interest_level
 end
 
-"""Function that uses other functions to find data that it writes to file"""
+"Function that uses other functions to find data that it writes to file"
 function data_to_file(nr_of_samples::Int, filepath::String, activity_acts::Vector{Activity})
     ### Generating everyday data by using other functions: ###
     dates::Vector{String} = generate_dates(nr_of_samples)
