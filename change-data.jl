@@ -266,6 +266,8 @@ end
 
 nr_of_samples = 100 # Tom did his survey for this many days.
 
+### Making all the different activities, with their corresponding time amounts and interest levels:
+
 bird_watching::Activity = Activity(
     "Bird Watching", 1, [5,6,7,8,9]
 )
@@ -314,10 +316,13 @@ listening_to_records::Activity = Activity(
     "Listening to records", 6, [4,5,6,7,8,9,10]
 )
 
-activity_acts = [
+### Putting all the activities into a list
+
+activity_acts::Vector{Activity} = [
     bird_watching, solving_crossword, going_for_a_walk,
     woodworking, model_building, studying, resting, gardening,
     golfing, cooking, reading, listening_to_records
 ]
 
+# Eventually, run the data_to_file function to write all the generated data to file:
 data_to_file(nr_of_samples, "tom_session_data.txt", activity_acts)
