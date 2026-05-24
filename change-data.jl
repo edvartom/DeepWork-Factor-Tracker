@@ -163,11 +163,15 @@ julia> generate_activities_and_interest_levels([Activity(Bowling, 3, [1,2,3]), A
 ([Reading, Reading, Reading], [5,4,5]) # Reading is more likely, since it has time_amount = 8 instead of time_amount = 3
 """
 function generate_activities_and_interest_levels(activity_acts::Vector{Activity})
+    # Extract time amounts from each activity and put them in a vector:
     activity_time_amounts::Vector{Int64} = getproperty.(activity_acts, :time_amount)
+    # Randomly choosing activity index based on a distribution making some activies more likely than others (based on their time amount):
     activity_index::Int64 = rand(Categorical(activity_time_amounts ./ sum(activity_time_amounts)))
+    # Extracting activity with this index:
     activity_during_session::Activity = activity_acts[activity_index]
-    activity_title::String = activity_during_session.title
-    interest_level_vec::Vector{Int64} = activity_during_session.interest_level
+    activity_title::String = activity_during_session.title # Extract activity name
+    interest_level_vec::Vector{Int64} = activity_during_session.interest_level # Extract interest levels
+    # Randomly chose an interest level from the interest level vector:
     interest_level::String = string(ceil(Int64, rand() * length(interest_level_vec) + interest_level_vec[1]))
     return activity_title, interest_level
 end
@@ -241,7 +245,7 @@ end
 ################## Application of the previous functions and structs ##################
 #######################################################################################
 
-nr_of_samples = 100
+nr_of_samples = 100 # Tom did his survey for this many days.
 
 bird_watching::Activity = Activity(
     "Bird Watching", 1, [5,6,7,8,9]
