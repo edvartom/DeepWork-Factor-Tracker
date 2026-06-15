@@ -55,18 +55,9 @@ end
 
 "Find nr of deep work sessions each day, and put them into a list"
 function find_nrs_of_sessions(session_starts_vec::Vector{Vector{Time}}, session_ends_vec::Vector{Vector{Time}})
-    nrs_of_sessions::Vector{Int64} = []
-    # For every deep work session ...
-    for day_nr::Int64 in eachindex(session_starts_vec)
-        session_lengths::Vector{Nanosecond} = session_ends_vec[day_nr] - session_starts_vec[day_nr]
-        # ... if the logged session does not have zero duration
-        if session_lengths != [Nanosecond(0)]
-            nr_of_sessions_this_day::Int64 = length(session_lengths) 
-            push!(nrs_of_sessions, nr_of_sessions_this_day)
-        else
-            push!(nrs_of_sessions, 0)
-        end
-    end
+    session_lengths_vec::Vector{Vector{Nanosecond}} = session_ends_vec - session_starts_vec
+    # Finds the number of deep work sessions. 'Ref' makes the vector stay in its format, not expand to a vector as long as session_lengths_vec.
+    nrs_of_sessions::Vector{Int} = ifelse.(session_lengths_vec .!= Ref([Nanosecond(0)]), length.(session_lengths_vec), 0)
     return nrs_of_sessions
 end
 
@@ -99,9 +90,9 @@ Base.@kwdef struct PlotAxis
     title::String = ""
     # Data to plot on the given axis:
     data::Vector{Any} = []
-    ticks::Any = :auto          # Axis ticks
+    ticks::Any = :auto            # Axis ticks
     rotation::Int64 = 0           # Rotation of the ticks
-    label::String = ""          # Axis label
+    label::String = ""            # Axis label
     # Description of what is plotted on the axes:
     description::String = ""
 end
