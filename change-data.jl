@@ -185,7 +185,7 @@ function data_to_file(nr_of_samples::Int64, filepath::String, activity_acts::Vec
     sleep_qualities::Vector{String} = generate_sleep_qualities(nr_of_samples)
     hours_awakes::Vector{String} = generate_hours_awakes(nr_of_samples)
     # Find random number of sessions that tom experiences in total during his survey
-    nrs_of_sessions::Int64 = abs(round.(Int64, rand(Normal(40, 20))))
+    nrs_of_sessions::Int64 = abs(round.(Int64, rand(Normal(nr_of_samples*0.4, nr_of_samples*0.2))))
     ### Generating data closer related to the deep work sessions: ###
     # Find random indices that correspond to the days Tom experiensed a deep work session:
     session_indices::Vector{Int64} = sort!(ceil.(Int64, rand(nrs_of_sessions)*nr_of_samples))

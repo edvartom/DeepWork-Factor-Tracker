@@ -1,4 +1,6 @@
 - Plotting dates vs. nr of sessions gives all date labels on the x-axis. Fix it.
+- Change data keeps making deep work sessions after 24 o'clock, for example 24:05 which is out of range.
+    - Behind that it said that there had been 23 hours since the last meal.
 - Something is wrong with total duration of deep work sessions vs. dates
 - Change axis of when he fell asleep, so it does not show 25 o'clock
 - Make shorter plot for duration of deep work sessions!!
