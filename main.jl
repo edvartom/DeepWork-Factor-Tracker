@@ -190,7 +190,7 @@ end
 dates_pla::PlotAxis = PlotAxis(
     title = "Dates",
     data = dates,
-    ticks = (dates[1:10:end], Dates.format.(dates[1:10:end], "dd.mm.yyyy")),
+    ticks = (dates[1:Int(length(dates)/10):end], Dates.format.(dates[1:10:end], "dd.mm.yyyy")),
     rotation = 45,
     label = "Date",
     description = "Date"
