@@ -1,5 +1,5 @@
-- Change data keeps making deep work sessions after 24 o'clock, for example 24:05 which is out of range.
-    - Behind that it said that there had been 23 hours since the last meal.
+- Install pdf-reader in vscode.
+- In tom_session_data.txt, the headline says "Time since meal", while the values shows the absolute time of the meal before.
 - Fell asleep seems to allways include some point at about 4 o'clock, even though there is no such value in tom_session_data. Does this mean that fell asleep does not listen to what is in tom_session_data at all?
     - Total session duration also has odd values and does not listen to the change in tom_session_data either. Does that mean nobody cares about tom_session_data?
     - Duration of session also has an odd value, and does not care about tom_session_data
@@ -25,3 +25,4 @@
     - Improve english grammar and flow
     - The data is random, right?
     - Improve installation instructions?
+- Replace tom_session_data with tom-session-data

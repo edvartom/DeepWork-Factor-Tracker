@@ -123,9 +123,15 @@ function generate_session_times(interval_start::Float64, interval_end::Float64)
     # so shorter times since the last meal is extended to 0.05 hours
     time_since_meal = time_since_meal < 0.05 ? 0.05 : time_since_meal
     # Generate random time for the deep work session to start in the interval where Tom is awake
-    session_start_float::Float64 = rand().*(interval_end - interval_start - session_duration - time_since_meal) .+ interval_start .+ time_since_meal
-    # Session end time and the time he ate is calculated with the start time as reference
-    session_end_float::Float64 = session_start_float + session_duration
+    # Assuming Tom has no deep work sessions after 24 o'clock, 
+    # so the while loop is running until the session ends before 24 o'clock.
+    session_start_float::Float64 = 0.0
+    session_end_float::Float64 = 25.0
+    while session_end_float >= 24.0
+        session_start_float = rand().*(interval_end - interval_start - session_duration - time_since_meal) .+ interval_start .+ time_since_meal
+        # Session end time and the time he ate is calculated with the start time as reference
+        session_end_float = session_start_float + session_duration
+    end
     meal_before_float::Float64 = session_start_float - time_since_meal
     # Converting floats to time-strings of the format 'HH:MM'
     session_start_str::String, session_end_str::String, meal_before_str::String = (
