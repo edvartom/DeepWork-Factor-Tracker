@@ -207,7 +207,7 @@ function data_to_file(nr_of_samples::Int64, filepath::String, activity_acts::Vec
     push!(interval_ends, 24.0)
     open(filepath, "w") do io
         # Write header to file
-        write(io, "Dates;Fell asleep;Woke up;Sleep quality;Hours awake;Session start;Session end;Time since meal;Activity;Interest level\n")
+        write(io, "Dates;Fell asleep;Woke up;Sleep quality;Hours awake;Session start;Session end;Meal before;Activity;Interest level\n")
         for i in eachindex(dates) # For each day ..
             if !(i in session_indices) # ... if he did not experience a deep work sesson ...
                 # ... write down the general data for a day without a deep work session
