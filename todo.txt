@@ -1,7 +1,3 @@
-- Fell asleep seems to allways include some point at about 4 o'clock, even though there is no such value in tom_session_data. Does this mean that fell asleep does not listen to what is in tom_session_data at all?
-    - Total session duration also has odd values and does not listen to the change in tom_session_data either. Does that mean nobody cares about tom_session_data?
-    - Duration of session also has an odd value, and does not care about tom_session_data
-- Something is wrong with total duration of deep work sessions vs. dates
 - Change axis of when he fell asleep, so it does not show 25 o'clock
 - Make shorter plot for duration of deep work sessions!!
 - Make data_to_file() shorter
