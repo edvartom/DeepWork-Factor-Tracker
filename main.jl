@@ -55,10 +55,12 @@ end
 
 "Make axis ticks for the fell_asleep"
 function format_fell_asleep_axis(fell_asleeps::Vector{Float64})
+    # Ticks will be at each whole hour
     axis_positions::Vector{Float64} = collect(ceil(minimum(fell_asleeps)):floor(maximum(fell_asleeps)))
-    axis_positions_00::Vector{Float64} = ifelse.(axis_positions .>= 24, axis_positions .- 24, axis_positions)
-    axis_labels::Vector{String} = floats_to_time_strings(axis_positions_00)
-    println(axis_labels)
+    # Floats larger than or equal to 24 starts at zero again
+    axis_floats::Vector{Float64} = ifelse.(axis_positions .>= 24, axis_positions .- 24, axis_positions)
+    # Converting floats to time strings like 22.5 -> 22:30
+    axis_labels::Vector{String} = floats_to_time_strings(axis_floats)
     return (axis_positions, axis_labels)
 end
 
