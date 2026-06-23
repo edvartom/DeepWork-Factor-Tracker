@@ -1,4 +1,3 @@
-- Change axis of when he fell asleep, so it does not show 25 o'clock
 - Make shorter plot for duration of deep work sessions!!
 - Make data_to_file() shorter
 - put the struct-function into the function file???
