@@ -91,8 +91,40 @@ function remove_zeros(vec)
         new_vec = vec[vec .!= ""]
     elseif typeof(vec) == Vector{Int64}
         new_vec = vec[vec .!= 0]
+    elseif typeof(vec) == Vector{Float64}
+        new_vec = vec[vec .!= 0.0]
     end
     return new_vec
+end
+
+"Convert times to floats"
+function time_to_float(time_vec::Vector{Time})
+    float_vec::Vector{Float64} = []
+    for t::Time in time_vec
+        f::Float64 = hour(t) + minute(t)/60 + second(t)/3600
+        push!(float_vec, f)
+    end
+    return float_vec
+end
+
+"Make data for the total deep work session time"
+function tot_session_time_data(tot_times::Vector{Time})
+    # Converting to floats
+    tot_time_floats::Vector{Float64} = time_to_float(tot_times)
+    # Replacing zeros with NaN
+    tot_time_nans::Vector = replace(tot_time_floats, 0.0 => NaN)
+    return tot_time_nans
+end
+
+"Make axis ticks for the total deep work session time"
+function format_tot_session_time_axis(tot_times::Vector{Time})
+    # Converting to floats
+    tot_time_floats::Vector{Float64} = time_to_float(tot_times)
+    # Ticks will be at each whole hour
+    axis_positions::Vector{Float64} = collect(ceil(minimum(remove_zeros(tot_time_floats))):floor(maximum(remove_zeros(tot_time_floats))))
+    # Converting floats to time strings like 2.5 -> 02:30
+    axis_labels::Vector{String} = floats_to_time_strings(axis_positions)
+    return (axis_positions, axis_labels)
 end
 
 "Defining an axis to be plotted, with default values"
@@ -283,7 +315,9 @@ nrs_of_sessions_pla::PlotAxis = PlotAxis(
 tot_durations_sessions_pla::PlotAxis = PlotAxis(
     title = "Total session duration",
     # Substracting two objects of type Vector{Vector{Time}}, gives an object of type Vector{Vector{Nanosecond}}:
-    data = find_total_session_durations(session_starts_vec - session_ends_vec),
+    data = tot_session_time_data(find_total_session_durations(session_starts_vec - session_ends_vec)),
+    ticks = format_tot_session_time_axis(find_total_session_durations(session_starts_vec - session_ends_vec)),
+    rotation = 45,
     label = "Total duration of deep work sessions\nduring the day",
     description = "Total duration of deep work sessions during the day"
 )
