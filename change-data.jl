@@ -154,6 +154,39 @@ function generate_activities_and_interest_levels(activity_acts::Vector{Activity}
     return activity_title, interest_level
 end
 
+"Help function to write data to file for a day with deep work sessions"
+function generate_deep_work_data(session_indices::Vector{Int64}, i::Int64, interval_starts::Vector{Float64}, 
+                                interval_ends::Vector{Float64}, activity_acts::Vector{Activity})
+    # Setting up for data generation for days with deep work session:
+    session_starts::String = ""
+    session_ends::String = ""
+    meal_befores::String = ""
+    activities::String = ""
+    interest_levels::String = ""
+    # Looping through session indices. For loop must be there, since session_indices might contain more of the same number.
+    # So for each day with deep work sessions, the loop runs for as many times as there are deep work sessions that day.
+    for j in session_indices
+        if j == i
+            # Generate data relating to the deep work session:
+            session_start::String, session_end::String, meal_before::String = generate_session_times(interval_starts[i], interval_ends[i])
+            activity::String, interest_level::String = generate_activities_and_interest_levels(activity_acts)
+            # Between each loop there times are separated by comma and space:
+            session_starts *= session_start * ", "
+            session_ends *= session_end * ", "
+            meal_befores *= meal_before * ", "
+            activities *= activity * ", "
+            interest_levels *= interest_level * ", "
+        end
+    end
+    # Removing the last comma and space:
+    session_starts = session_starts[1:end-2]
+    session_ends = session_ends[1:end-2]
+    meal_befores = meal_befores[1:end-2]
+    activities = activities[1:end-2]
+    interest_levels = interest_levels[1:end-2]
+    return session_starts, session_ends, meal_befores, activities, interest_levels
+end
+
 "Uses other functions to find data that it writes to file"
 function data_to_file(nr_of_samples::Int64, filepath::String, activity_acts::Vector{Activity})
     ### Generating everyday data by using other functions: ###
@@ -192,33 +225,8 @@ function data_to_file(nr_of_samples::Int64, filepath::String, activity_acts::Vec
                     hours_awakes[i] * ";00:00;00:00;00:00;;0\n"
                 )
             else
-                # Setting up for data generation for days with deep work session:
-                session_starts::String = ""
-                session_ends::String = ""
-                meal_befores::String = ""
-                activities::String = ""
-                interest_levels::String = ""
-                # Looping through session indices. For loop must be there, since session_indices might contain more of the same number.
-                # So for each day with deep work sessions, the loop runs for as many times as there are deep work sessions that day.
-                for j in session_indices
-                    if j == i
-                        # Generate data relating to the deep work session:
-                        session_start::String, session_end::String, meal_before::String = generate_session_times(interval_starts[i], interval_ends[i])
-                        activity::String, interest_level::String = generate_activities_and_interest_levels(activity_acts)
-                        # Between each loop there times are separated by comma and space:
-                        session_starts *= session_start * ", "
-                        session_ends *= session_end * ", "
-                        meal_befores *= meal_before * ", "
-                        activities *= activity * ", "
-                        interest_levels *= interest_level * ", "
-                    end
-                end
-                # Removing the last comma and space:
-                session_starts = session_starts[1:end-2]
-                session_ends = session_ends[1:end-2]
-                meal_befores = meal_befores[1:end-2]
-                activities = activities[1:end-2]
-                interest_levels = interest_levels[1:end-2]
+                session_starts::String, session_ends::String, meal_befores::String, activities::String, 
+                interest_levels::String = generate_deep_work_data(session_indices, i, interval_starts, interval_ends, activity_acts)
                 # Write day with deep work sessin to file
                 write(
                     io,
