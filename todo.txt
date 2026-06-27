@@ -1,6 +1,4 @@
 - Readme
-    - Improve english by dictionary
-    - Improve english grammar and flow
     - Improve installation instructions?
 - Find average of the different things when he had a deep work session vs. when he did not have a deep work session
 
