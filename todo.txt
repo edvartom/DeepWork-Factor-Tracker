@@ -1,3 +1,10 @@
+- Readme
+    - Improve english by dictionary
+    - Improve english grammar and flow
+    - Improve installation instructions?
+- Find average of the different things when he had a deep work session vs. when he did not have a deep work session
+
+Furhter development
 - Make plot of how often the same activity, the same interest-level during deep work session
 - Make shorter plots of
     - dates
@@ -9,10 +16,3 @@
     - nr of sessions
     - total length of sessions
     to fit the times he had deep work sessions
-- Find average of the different things when he had a deep work session vs. when he did not have a deep work session
-- Readme
-    - Improve english by dictionary
-    - Improve english grammar and flow
-    - The data is random, right?
-    - Improve installation instructions?
-- Replace tom_session_data with tom-session-data

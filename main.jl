@@ -226,7 +226,7 @@ end
     dates, fell_asleeps, woke_ups, sleep_qualities, time_awakes,
     session_starts_vec, session_ends_vec, meal_befores_vec,
     activities_vec, interest_levels_vec
-) = read_data("tom_session_data.txt")
+) = read_data("tom-session-data.txt")
 
 ############ Structs for x- and y-axis with length nr_of_samples ############
 

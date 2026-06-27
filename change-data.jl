@@ -311,4 +311,4 @@ activity_acts::Vector{Activity} = [
 ]
 
 # Eventually, run the data_to_file function to write all the generated data to file:
-data_to_file(nr_of_samples, "tom_session_data.txt", activity_acts)
+data_to_file(nr_of_samples, "tom-session-data.txt", activity_acts)
