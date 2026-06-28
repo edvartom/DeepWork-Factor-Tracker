@@ -13,13 +13,25 @@ This programming project is made in order to plot factors related to Tom's deep 
 ## How to test the program
 ### Installation
 * Install Julia.
-* Install the packages Dates and Plots.
+* Install the packages Dates and Plots. See the step by step guide below.
 * If you want to generate new data in tom_sessions_data, install package Distributions.
 
 ### How to run the code
 * Run 'main.jl'.
-* Follow the instructions given in the terminal.
+* Follow the instructions given in the terminal. This generates a plot.
+* Find the plot you have generated in 'plot.pdf'.
 * If you want to generate new data in 'tom_sessions_data', run 'change-data.jl'.
+
+### Step by step installation of packages
+This recipe ensures that you install the right packages wiht the right versions.
+* Clone the project and cd into the project directory.
+* Write the following command in the bash terminal to activate the project:
+  ```julia --project=.```
+  This will install the right packages on your computer.
+* Now you can run whatever Julia file you want from the terminal by writing:
+  ```include("file-name.jl")```
+  for example 
+  ```include("main.jl")```
 
 <br>
 
