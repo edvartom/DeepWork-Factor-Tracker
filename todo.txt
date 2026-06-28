@@ -1,6 +1,5 @@
-- Find average of the different things when he had a deep work session vs. when he did not have a deep work session
-
 Furhter development
+- Find average of the different things when he had a deep work session vs. when he did not have a deep work session
 - Make plot of how often the same activity, the same interest-level during deep work session
 - Make shorter plots of
     - dates
